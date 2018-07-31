@@ -8,7 +8,7 @@ class Item(models.Model):
     item_price = models.FloatField()
     item_stock = models.IntegerField(default=0)
     availability = models.BooleanField(default=True)
-    created_date = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(default=timezone.now)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -32,4 +32,5 @@ class Sale(models.Model):
         on_delete=models.CASCADE
     )
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    price_sold = models.FloatField(default=item.item_price)
+    custom_price = models.FloatField()
+    date_created = models.DateTimeField(default=timezone.now)

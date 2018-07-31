@@ -7,25 +7,25 @@ from tsmanager.models import Item
 
 class ItemTestCase(TestCase):
     def setUp(self):
-        self.no_desc = Item.objects.create(name="Item A", item_price=1_000)
+        self.no_desc = Item.objects.create(item_name="Item A", item_price=1_000)
         self.with_desc = Item.objects.create(
-            name="Item B", item_price=2_000, description="this is a description")
+            item_name="Item B", item_price=2_000, description="this is a description")
 
     def test_item_creation(self):
         try:
-            Item.objects.get(name="Item A")
-            Item.objects.get(name="Item B")
+            Item.objects.get(item_name="Item A")
+            Item.objects.get(item_name="Item B")
         except Item.DoesNotExist:
             self.fail(
                 "Unexpected DoesNotExist: Item should be created successfully!")
 
-    def test_name(self):
+    def test_item_name(self):
         try:
-            self.assertEqual(self.no_desc.name, "Item A", "Wrong name!")
-            self.assertEqual(self.with_desc.name, "Item B", "Wrong name!")
+            self.assertEqual(self.no_desc.item_name, "Item A", "Wrong item_name!")
+            self.assertEqual(self.with_desc.item_name, "Item B", "Wrong item_name!")
         except AttributeError:
             self.fail(
-                "Unexpected AttributeError for name: Item should have name attribute")
+                "Unexpected AttributeError for item_name: Item should have item_name attribute")
 
     def test_item_price(self):
         try:
@@ -49,4 +49,4 @@ class ItemTestCase(TestCase):
 
     # def test_item_unqiueness(self):
     #   self.assertRaises(IntegrityError,
-    #     Item.objects.create(name="Item A", item_price=1_000))
+    #     Item.objects.create(item_name="Item A", item_price=1_000))
