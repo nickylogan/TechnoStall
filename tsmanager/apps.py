@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class TechnostallManagerConfig(AppConfig):
-    name = 'technostall_manager'
+    name = 'tsmanager'
 
     def ready(self):
-        import technostall_manager.signals
+        import tsmanager.signals
