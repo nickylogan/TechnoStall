@@ -1,5 +1,5 @@
 from django.test import TestCase
-from technostall_manager.models import Item
+from tsmanager.models import Item
 
 # Create your tests here.
 class ItemTestCase(TestCase):

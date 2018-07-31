@@ -8,4 +8,4 @@ class Item(models.Model):
   description = models.TextField(null=True, blank=True)
   
   def __str__(self):
-    return "<Item> %s : Rp %s" % (item_name, item_price)
+    return "<Item> %s : Rp %s" % (self.item_name, self.item_price)
