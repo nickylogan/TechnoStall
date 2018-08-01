@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.db.utils import IntegrityError
-from tsmanager.models import Item
+from itemmanager.models import Item
 
 
 class ItemTestCase(TestCase):

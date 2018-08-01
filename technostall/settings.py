@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tsmanager',
+    'itemmanager',
+    'usermanager'
 ]
 
 MIDDLEWARE = [
@@ -121,5 +122,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Other settings
-
-# AUTH_USER_MODEL = 'tsmanager.'

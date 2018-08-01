@@ -1,5 +1,5 @@
 from django.test import TestCase
-from tsmanager.models import Restock, Item
+from itemmanager.models import Restock, Item
 
 
 class RestockTestCase(TestCase):
