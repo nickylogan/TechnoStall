@@ -4,7 +4,7 @@ from django.utils import timezone
 class Item(models.Model):
     item_name = models.CharField(max_length=50, unique=True)
     item_price = models.FloatField()
-    item_stock = models.IntegerField(default=0)
+    item_stock = models.PositiveIntegerField(default=0)
     availability = models.BooleanField(default=True)
     date_created = models.DateTimeField(default=timezone.now)
     description = models.TextField(null=True, blank=True)
