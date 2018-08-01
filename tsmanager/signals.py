@@ -9,8 +9,9 @@ def save_restock(sender, instance, **kwargs):
     item.item_stock += instance.restock_amount
     item.save()
 
+
 @receiver(post_save, sender=Sale)
 def save_sale(sender, instance, **kwards):
-  item = instance.item
-  item.item_stock += instance.sale_amount
-  item.save()
+    item = instance.item
+    item.item_stock -= instance.sale_amount
+    item.save()
