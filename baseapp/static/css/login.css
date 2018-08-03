@@ -11,9 +11,9 @@ body {
 
 .login-form-container {
     display: grid;
-    grid-template-columns: 1fr 2fr;
     grid-column-gap: 1.25rem;
-    padding: 5rem;
+    padding: 2.5rem;
+    margin: 1rem;
     background: white;
     max-width: 900px;
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.4);
@@ -21,21 +21,52 @@ body {
 }
 
 .login-form-header {
-    border-right: solid thin;
-    padding-right: 1.25rem;
+    padding-bottom: 1rem;
 }
 
 .login-form-header h1 {
+    font-size: 2rem;
+    font-weight: bolder;
     align-self: center;
     justify-self: center;
+    text-align: center;
 }
 
-.login-form-container h1 {
-    text-align: right;
+.login-form h2 {
+    font-size: 1.5rem;
 }
 
 .text-danger {
     display: block;
     /* box-sizing: border-box; */
     margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 425px) {
+    .login-form-header h1 {
+        font-size: 2.5rem;
+    }
+    .login-form-container {
+        padding: 5rem;
+    }
+    .login-form h2 {
+        font-size: 2rem;
+    }
+}
+
+/* tablet */
+@media only screen and (min-width: 768px) and (orientation: landscape) {
+    .login-form-container {
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: 1fr;
+    }
+    .login-form-header {
+        border-bottom: none;
+        border-right: solid thin;
+        padding-right: 1.25rem;
+    }
+
+    .login-form-header h1 {
+        text-align: right;
+    }
 }
