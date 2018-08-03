@@ -1,18 +1,15 @@
 from django.db import models
 from django.utils import timezone
-from .item import Item
 
 class RestockManager(models.Manager):
     pass
 
 class Restock(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    restock_amount = models.PositiveIntegerField()
-    restock_cost = models.FloatField()
     restock_PIC = models.CharField(max_length=50)
+    restock_proof_of_payment = models.ImageField(blank=True)
+    date_created = models.DateTimeField(default=timezone.now)
 
-    # objects = 
+    objects = RestockManager()
 
     def __str__(self):
-        return "%d %s(s) by %s for %s" % (self.restock_amount, self.item.item_name,
-                                          self.PIC, 'Rp {0:,}'.format(self.restock_cost))
+        return super().__str__()
