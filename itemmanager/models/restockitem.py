@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from .item import Item, Restock
+from . import Item, Restock
 
 class RestockItemManager(models.Manager):
     pass

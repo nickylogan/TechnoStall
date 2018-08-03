@@ -2,7 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import timezone
-from .item import Item, Sale
+from . import Item, Sale
 
 class SaleItemManager(models.Manager):
     pass
