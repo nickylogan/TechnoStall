@@ -13,5 +13,7 @@ class Sale(models.Model):
     )
     date_created = models.DateTimeField(default=timezone.now)
 
+    objects = SaleManager()
+
     def __str__(self):
         return super().__str__()
