@@ -4,6 +4,7 @@ from django.utils import timezone
 class RestockManager(models.Manager):
     pass
 
+
 class Restock(models.Model):
     restock_PIC = models.CharField(max_length=50)
     restock_proof_of_payment = models.ImageField(blank=True)

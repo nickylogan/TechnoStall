@@ -6,7 +6,11 @@ from django.utils.translation import gettext_lazy as _
 from . import Item, Restock
 
 class RestockItemManager(models.Manager):
-    pass
+    def filter_restock(self, restock):
+        return super().get_queryset().filter(restock=restock)
+    
+    def filter_item(self, item):
+        return super().get_queryset().filter(item=item)
 
 class RestockItem(models.Model):
     restock = models.ForeignKey(Restock, on_delete=models.CASCADE)
@@ -15,6 +19,9 @@ class RestockItem(models.Model):
     restock_item_total_cost = models.FloatField()
 
     objects = RestockItemManager()
+
+    class Meta:
+        unique_together = (("restock", "item"))
 
     def __str__(self):
         return "%d %s(s) for %d" % (self.item.item_name, self.restock_item_amount, self.restock_item_total_cost)

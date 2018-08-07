@@ -9,8 +9,9 @@ class Item(models.Model):
     item_price = models.FloatField()
     item_stock = models.PositiveIntegerField(default=0)
     item_availability = models.BooleanField(default=True)
+    item_image = models.ImageField(blank=True)
     date_created = models.DateTimeField(default=timezone.now)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
 
     objects = ItemManager()
 

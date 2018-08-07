@@ -17,6 +17,11 @@ class SaleItem(models.Model):
     sale_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     sale_price = models.FloatField(blank=True, null=True, validators=[MinValueValidator(1)])
 
+    objects = SaleItemManager()
+
+    class Meta:
+        unique_together = (("sale", "item"))
+
     def __str__(self):
         return "%d %s(s) for %d" % (self.item.item_name, self.sale_amount, self.sale_price)
 
