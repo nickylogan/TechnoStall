@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db.utils import IntegrityError
 from itemmanager.models import Sale, SaleItem, Item
 
 
@@ -17,15 +18,20 @@ class SaleTestCase(TestCase):
 
     def test_sale_not_zero(self):
         with self.assertRaises(ValidationError):
-            sale_item = SaleItem.objects.create(sale=self.sale, item=self.item_d, sale_amount=0, sale_price=10000)
+            sale_item = SaleItem(sale=self.sale, item=self.item_d, sale_amount=0, sale_price=10000)
             sale_item.full_clean()
 
     def test_sale_not_negative(self):
         with self.assertRaises(ValidationError):
-            sale_item = SaleItem.objects.create(sale=self.sale, item=self.item_d, sale_amount=-5, sale_price=10000)
+            sale_item = SaleItem(sale=self.sale, item=self.item_d, sale_amount=-5, sale_price=10000)
             sale_item.full_clean()
 
-    def test_sale_under_stock(self):
+    def test_sale_count_under_stock(self):
         with self.assertRaises(ValidationError):
-            sale_item = SaleItem.objects.create(sale=self.sale, item=self.item_d, sale_amount=1000, sale_price=10000)
+            sale_item = SaleItem(sale=self.sale, item=self.item_d, sale_amount=1000, sale_price=10000)
             sale_item.full_clean()
+
+    def test_sale_unique_item(self):
+        sale_item1 = SaleItem.objects.create(sale=self.sale, item=self.item_d, sale_amount=10, sale_price=10000)
+        with self.assertRaises(IntegrityError):
+            sale_item2 = SaleItem.objects.create(sale=self.sale, item=self.item_d, sale_amount=10, sale_price=10000)
