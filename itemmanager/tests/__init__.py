@@ -1,2 +1,3 @@
-from .item_tests import *
-from .restock_tests import *
+from .test_item import *
+from .test_restock import *
+from .test_sale import *

@@ -48,6 +48,6 @@ class ItemTestCase(TestCase):
             self.fail(
                 "Unexpected AttributeError for description: Item should have description attribute")
 
-    def test_item_unqiueness(self):
+    def test_item_uniqueness(self):
         with self.assertRaises(IntegrityError):
             Item.objects.create(item_name="Item A", item_price=1_000)
