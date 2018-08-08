@@ -9,8 +9,8 @@
 {% endblock styles %}
 
 {% block content %}
-<div class="login-container">
-    <div class="login-form-container">
+<div class="container login-container">
+    <div class="card-panel row hoverable login-form-container">
         <div class="login-form-header">
             <h1>TECHNOSTALL MANAGER</h1>
         </div>
@@ -25,23 +25,32 @@
                 <small class="text-danger">Please login to see this page.</small>
                 {% endif %}
             {% endif %}
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text"
-                    class="form-control" name="username" id="iusername" aria-describedby="help_username" placeholder="Your username...">
-                <small id="help_username" class="form-text text-muted">Enter your username</small>
+            <div class="row">
+                <div class="input-field">
+                    <input type="text" name="username" id="iusername" aria-describedby="help_username">
+                    <label for="username" class="">Username</label>
+                    <span id="help_username" class="helper-text">Enter your username</span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="">
+            <div class="row">
+                <div class="input-field">
+                    <input type="password" class="form-control" name="password" id="password">
+                    <label for="password" class="">Password</label>
+                </div>
             </div>
             {% if error %}
             <small class="text-danger">Your username and password didn't match. Please try again.</small>
             {% endif %}
-            <input class="md-btn md-btn-primary" type="submit" value="login" />
+            <button class="btn waves-effect waves-effect-light" type="submit" value="login">SUBMIT</button>
             <input type="hidden" name="next" value="{{ next }}" />
         </form>
     </div>
 </div>
 
 {% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(() => M.updateTextFields());
+</script>
+{% endblock scripts %}

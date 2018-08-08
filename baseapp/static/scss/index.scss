@@ -1,0 +1,33 @@
+@import 'base';
+
+.container {
+    height: 100vh;
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+.btn,
+.btn-large,
+.btn-small {
+    border-radius: 100px;
+}
+
+/* tablet */
+
+@media only screen and (min-width: 768px) {
+    .container h1 {
+        font-size: 3rem;
+    }
+    // .container a {
+    //     font-size: 1rem;
+    // }
+}
+
+/* laptop */
+
+@media only screen and (min-width: 1024px) {
+    .container h1 {
+        font-size: 4rem;
+    }
+}

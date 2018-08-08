@@ -2,4 +2,6 @@
 
 {% block content %}
 <h1>DASHBOARD</h1>
+{{ request.session.ts_user.major }} <br>
+{{ request.session.ts_user.role }}
 {% endblock content %}
