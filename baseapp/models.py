@@ -14,7 +14,7 @@ class TSUser(models.Model):
     (INFORMATION_SYSTEMS, 'Information Systems')
   )
 
-  STALLKEEPER = 'SL'
+  STALLKEEPER = 'SK'
   STALLADMIN = 'SA'
   ROLE_CHOICES = (
     (STALLKEEPER, 'Stallkeeper'),
@@ -34,3 +34,6 @@ class TSUser(models.Model):
   def role_string(self):
     roles = dict(self.ROLE_CHOICES)
     return roles[self.role]
+
+  def __str__(self):
+    return "%s - %s, %s" % (self.user.username, self.major, self.role)
