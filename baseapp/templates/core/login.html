@@ -37,10 +37,10 @@
                     <input type="password" class="form-control" name="password" id="password">
                     <label for="password" class="">Password</label>
                 </div>
+                {% if error %}
+                <small class="red-text text-lighten-2">Your username and password didn't match. Please try again.</small>
+                {% endif %}
             </div>
-            {% if error %}
-            <small class="text-danger">Your username and password didn't match. Please try again.</small>
-            {% endif %}
             <button class="btn waves-effect waves-effect-light" type="submit" value="login">SUBMIT</button>
             <input type="hidden" name="next" value="{{ next }}" />
         </form>

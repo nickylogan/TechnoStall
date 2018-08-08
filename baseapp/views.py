@@ -24,7 +24,7 @@ def login(request):
             auth_login(request, user)
             return redirect('/dashboard/')
         else:
-            render(request, 'core/login.html', {'error': True})
+            return render(request, 'core/login.html', {'error': True})
     else:
         if request.user.is_authenticated:
             return redirect('/dashboard/')
