@@ -37,3 +37,6 @@ class TSUser(models.Model):
 
   def __str__(self):
     return "%s - %s, %s" % (self.user.username, self.major, self.role)
+
+  def is_admin(self):
+    return self.role == self.STALLADMIN

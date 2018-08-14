@@ -23,6 +23,8 @@ def login(request):
             request.session['ts_user']['role'] = tsuser.role_string()
             request.session['ts_user']['major_short'] = tsuser.major
             request.session['ts_user']['role_short'] = tsuser.role
+            request.session['ts_user']['is_admin'] = tsuser.is_admin()
+            
             auth_login(request, user)
             return redirect('/dashboard/')
         else:
