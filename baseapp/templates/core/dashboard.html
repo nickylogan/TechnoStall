@@ -1,7 +1,174 @@
 {% extends "core/base.html" %}
+{% load static %}
+{% load define_action %}
+
+{% block title %}
+{{ "Dashboard" }}
+{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+<link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
+
+{% block dashbord_styles %}
+
+{% endblock dashbord_styles %}
+{% endblock styles %}
 
 {% block content %}
-<h1>DASHBOARD</h1>
-{{ request.session.ts_user.major }} <br>
-{{ request.session.ts_user.role }}
+<header id="header" class="page-topbar">
+  <!-- start header nav-->
+  <div class="navbar-fixed">
+    <nav class="navbar-color blue-grey darken-4">
+      <div class="nav-wrapper">
+        <ul class="left">
+          <li>
+            <h1 class="logo-wrapper">
+              <a href="{% url 'dashboard' %}" class="brand-logo darken-1">
+                <img src="{% static 'images/logo.png' %}" alt="technostall-logo">
+                <span class="logo-text hide-on-med-and-down heading">TECHNOSTALL</span>
+              </a>
+            </h1>
+          </li>
+        </ul>
+        <ul class="right hide-on-med-and-down">
+          <li>
+            <a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown">
+              <i class="material-icons">notifications_none
+                <small class="notification-badge amber darken-4">5</small>
+              </i>
+            </a>
+            <ul id="notifications-dropdown" class="dropdown-content">
+              <li>
+                <h6>NOTIFICATIONS
+                  <span class="new badge">5</span>
+                </h6>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="#!" class="grey-text text-darken-2">
+                  <span class="material-icons icon-bg-circle cyan small">add_shopping_cart</span> A new order has been placed!</a>
+                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">2 hours ago</time>
+              </li>
+              <li>
+                <a href="#!" class="grey-text text-darken-2">
+                  <span class="material-icons icon-bg-circle red small">stars</span> Completed the task</a>
+                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">3 days ago</time>
+              </li>
+              <li>
+                <a href="#!" class="grey-text text-darken-2">
+                  <span class="material-icons icon-bg-circle teal small">settings</span> Settings updated</a>
+                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">4 days ago</time>
+              </li>
+              <li>
+                <a href="#!" class="grey-text text-darken-2">
+                  <span class="material-icons icon-bg-circle deep-orange small">today</span> Director meeting started</a>
+                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">6 days ago</time>
+              </li>
+              <li>
+                <a href="#!" class="grey-text text-darken-2">
+                  <span class="material-icons icon-bg-circle amber small">trending_up</span> Generate monthly report</a>
+                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">1 week ago</time>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="{% url 'profile' %}" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown" title="Profile">
+              <span class="avatar-status avatar-online">
+                <img src="{% static 'images/no-user.png' %}" alt="avatar">
+                <i></i>
+              </span>
+            </a>
+          </li>
+          <li>
+            Welcome, {{ request.user.get_full_name }}
+          </li>
+          <li>
+            <a href="{% url 'logout' %}" class="waves-effect waves-block waves-light profile-button" title="Logout">
+              <span class="">
+                <i class="material-icons">exit_to_app</i>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <!-- end header nav-->
+</header>
+<div id="main">
+  <!-- START WRAPPER -->
+  <div class="wrapper">
+    <!-- START LEFT SIDEBAR NAV-->
+    <aside id="left-sidebar-nav">
+      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y blue-grey lighten-5" style="transform: translateX(0%);">
+        <li class="no-padding">
+          <ul class="collapsible expandable" data-collapsible="accordion">
+            <li class="bold">
+              <a href="javascript:void(0)" class="waves-effect waves-cyan collapsible-header blue-grey lighten-5">
+                  <i class="fa fa-cookie-bite"></i>
+                  <span class="nav-text">Items</span>
+                </a>
+              <a class="collapsible-body waves-effect"><i class="fa fa-clipboard-list" style="font-size: 1rem;"></i><span>Price list</span></a>
+            </li>
+            <li class="bold">
+              <a href="javascript:void(0)" class="waves-effect waves-cyan collapsible-header blue-grey lighten-5">
+                  <i class="fa fa-shopping-cart"></i>
+                  <span class="nav-text">Sales</span>
+                </a>
+              <a class="collapsible-body waves-effect"><i class="fa fa-chart-bar" style="font-size: 1rem;"></i><span>Your summary</span></a>
+              <a class="collapsible-body waves-effect"><i class="fa fa-dollar-sign" style="font-size: 1rem;"></i><span>Add new sale</span></a>
+            </li>
+            <li class="bold">
+              <a href="cards-basic.html" class="waves-effect waves-cyan blue-grey lighten-5">
+                  <i class="fa fa-print"></i>
+                  <span class="nav-text">Printing</span>
+                </a>
+            </li>
+            <li class="bold">
+              <a href="ui-basic-buttons.html" class="waves-effect waves-cyan blue-grey lighten-5">
+                  <i class="fas fa-users"></i>
+                  <span class="nav-text">Staff manager</span>
+                </a>
+            </li>
+          </ul>
+        </li>
+        <!-- <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
+          <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 529.333px; right: 3px;">
+          <div class="ps-scrollbar-y" style="top: 0px; height: 446px;"></div>
+        </div> -->
+      </ul>
+      <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only amber darken-4">
+        <i class="material-icons">menu</i>
+      </a>
+    </aside>
+    <!-- END LEFT SIDEBAR NAV-->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+    <!-- START CONTENT -->
+    {% block dashboard_content %}
+    <section id="content">
+      <!--start container-->
+      <div class="container">
+      </div>
+      <!--end container-->
+    </section>
+    {% endblock dashboard_content %}        
+    <!-- END CONTENT -->
+    <!-- //////////////////////////////////////////////////////////////////////////// -->
+  </div>
+  <!-- END WRAPPER -->
+</div>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/materialize.min.js' %}"></script>
+<script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+{% block dashboard_scripts %}
+
+{% endblock dashboard_scripts %}
+{% endblock scripts %}

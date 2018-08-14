@@ -21,6 +21,8 @@ def login(request):
             request.session['ts_user'] = {}
             request.session['ts_user']['major'] = tsuser.major_string()
             request.session['ts_user']['role'] = tsuser.role_string()
+            request.session['ts_user']['major_short'] = tsuser.major
+            request.session['ts_user']['role_short'] = tsuser.role
             auth_login(request, user)
             return redirect('/dashboard/')
         else:
@@ -34,6 +36,11 @@ def logout(request):
     auth_logout(request)
     return redirect('/')
 
-@login_required(login_url='/login/')
+@login_required(login_url='/login')
 def dashboard(request):
+    return render(request, 'core/dashboard.html')
+
+@login_required(login_url='/login')
+def profile(request):
+    # TODO create profile template
     return render(request, 'core/dashboard.html')
