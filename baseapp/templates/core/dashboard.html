@@ -10,10 +10,13 @@
 <link rel="stylesheet" href="{% static 'css/materialize.css' %}">
 <link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
 <link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
+<style>
+.nav-active {
+  border-right: solid .3rem #263238;
+}
+</style>
 
-{% block dashbord_styles %}
-
-{% endblock dashbord_styles %}
+{% block dashboard_styles %}{% endblock dashboard_styles %}
 {% endblock styles %}
 
 {% block content %}
@@ -102,33 +105,42 @@
   <div class="wrapper">
     <!-- START LEFT SIDEBAR NAV-->
     <aside id="left-sidebar-nav">
-      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y blue-grey lighten-5" style="transform: translateX(0%);">
+      <ul id="slide-out" class="side-nav fixed leftside-navigation ps-container ps-active-y" style="transform: translateX(0%);">
         <li class="no-padding">
-          <ul class="collapsible expandable" data-collapsible="accordion">
+          <ul class="" data-collapsible="accordion">
             <li class="bold">
-              <a href="javascript:void(0)" class="waves-effect waves-cyan collapsible-header blue-grey lighten-5">
-                  <i class="fa fa-cookie-bite"></i>
-                  <span class="nav-text">Items</span>
+                <a href="javascript:void(0)" class="waves-effect amber darken-4 white-text">
+                    <i class="fa fa-plus white-text" style="font-size: 1rem;"></i>
+                    <span class="nav-text">ADD SALE</span>
                 </a>
-              <a class="collapsible-body waves-effect"><i class="fa fa-clipboard-list" style="font-size: 1rem;"></i><span>Price list</span></a>
             </li>
             <li class="bold">
-              <a href="javascript:void(0)" class="waves-effect waves-cyan collapsible-header blue-grey lighten-5">
-                  <i class="fa fa-shopping-cart"></i>
-                  <span class="nav-text">Sales</span>
+              <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+                  <i class="fa fa-clipboard-list" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Pricelist</span>
                 </a>
-              <a class="collapsible-body waves-effect"><i class="fa fa-chart-bar" style="font-size: 1rem;"></i><span>Your summary</span></a>
-              <a class="collapsible-body waves-effect"><i class="fa fa-dollar-sign" style="font-size: 1rem;"></i><span>Add new sale</span></a>
             </li>
             <li class="bold">
-              <a href="cards-basic.html" class="waves-effect waves-cyan blue-grey lighten-5">
-                  <i class="fa fa-print"></i>
+                <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'restock' %}nav-active{% endif %}">
+                    <i class="fa fa-redo" style="font-size: 1rem;"></i>
+                    <span class="nav-text">Restock</span>
+                  </a>
+              </li>
+            <li class="bold">
+              <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'summary' %}nav-active{% endif %}">
+                  <i class="fa fa-chart-bar" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Your summary</span>
+                </a>
+            </li>
+            <li class="bold">
+              <a href="cards-basic.html" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
+                  <i class="fa fa-print" style="font-size: 1rem;"></i>
                   <span class="nav-text">Printing</span>
                 </a>
             </li>
             <li class="bold">
-              <a href="ui-basic-buttons.html" class="waves-effect waves-cyan blue-grey lighten-5">
-                  <i class="fas fa-users"></i>
+              <a href="ui-basic-buttons.html" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
+                  <i class="fas fa-users" style="font-size: 1rem;"></i>
                   <span class="nav-text">Staff manager</span>
                 </a>
             </li>
