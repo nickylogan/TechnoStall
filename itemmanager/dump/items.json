@@ -1,0 +1,233 @@
+[{
+        "pk": 1,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Aqua",
+            "item_price": 4000
+        }
+    },
+    {
+        "pk": 2,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Beng Beng",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 3,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Biskuat Bolu",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 4,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Chacha",
+            "item_price": 1000
+        }
+    },
+    {
+        "pk": 5,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Chocolatos",
+            "item_price": 1000
+        }
+    },
+    {
+        "pk": 6,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Choki Choki",
+            "item_price": 1000
+        }
+    },
+    {
+        "pk": 7,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Kopi",
+            "item_price": 4000
+        }
+    },
+    {
+        "pk": 8,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Mie Kremes Besar",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 9,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Mie Kremes Kecil",
+            "item_price": 1500
+        }
+    },
+    {
+        "pk": 10,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Mie Sedap",
+            "item_price": 5000
+        }
+    },
+    {
+        "pk": 11,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Momogi",
+            "item_price": 1000
+        }
+    },
+    {
+        "pk": 12,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Nu Milk Tea",
+            "item_price": 7000
+        }
+    },
+    {
+        "pk": 13,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Oreo Biscuit",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 14,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Oreo Softcake",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 15,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Piattos",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 16,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Pilus Garuda",
+            "item_price": 1500
+        }
+    },
+    {
+        "pk": 17,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Pop Mie",
+            "item_price": 6000
+        }
+    },
+    {
+        "pk": 18,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Prima",
+            "item_price": 3000
+        }
+    },
+    {
+        "pk": 19,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Print Hitam Putih",
+            "item_price": 1000
+        }
+    },
+    {
+        "pk": 20,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Print Sertifikat",
+            "item_price": 3000
+        }
+    },
+    {
+        "pk": 21,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Print Warna",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 22,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Richeese Ah",
+            "item_price": 1500
+        }
+    },
+    {
+        "pk": 23,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Slai Olai",
+            "item_price": 2000
+        }
+    },
+    {
+        "pk": 24,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Sprite",
+            "item_price": 7000
+        }
+    },
+    {
+        "pk": 25,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "S-Tee",
+            "item_price": 4000
+        }
+    },
+    {
+        "pk": 26,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Tango Kecil",
+            "item_price": 1000
+        }
+    },
+    {
+        "pk": 27,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Tea",
+            "item_price": 3000
+        }
+    },
+    {
+        "pk": 28,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Top",
+            "item_price": 2500
+        }
+    },
+    {
+        "pk": 29,
+        "model": "itemmanager.Item",
+        "fields": {
+            "item_name": "Twister",
+            "item_price": 2500
+        }
+    }
+]

@@ -1,0 +1,85 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+{% block dashboard_styles %}
+<style>
+    .search-wrapper {
+        position: relative;
+    }
+    .search-wrapper .label-icon {
+        position: absolute;
+        bottom: 30%;
+    }
+    .search-wrapper input[type="search"] {
+        padding-left: 2.5rem;
+        width: calc(100% - 2.5rem);
+    }
+</style>
+{% endblock dashboard_styles %}
+
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'pricelist' %}" class="breadcrumb" style="font-size:1rem">Pricelist</a>
+                </div>
+            </div>
+        </nav>
+                            
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title row">
+                    <h4 class="col s12 m6 l8" style="margin: 0">
+                        Pricelist
+                    </h4>
+                    <div class="col s12 m6 l4 search-wrapper">
+                        <form action="{% url 'pricelist' %}" method="GET">
+                            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                            <input id="search" type="search" name="f" value="{{ filter_pattern }}">
+                        </form>
+                    </div>
+                </div>
+                <table class="bordered highlight">
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for item in items %}
+                        <tr onclick="location.href='{% url 'item_detail' pk=item.pk %}'">
+                            <td>{{ forloop.counter|add:min_item_index }}</td>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.item_stock }}</td>
+                            <td>Rp {{ item.item_price|floatformat:0|intcomma }}</td>
+                            <td>
+                                <a href="{% url 'item_detail' pk=item.pk %}"><i class="fa fa-info"></i></a>
+                                <a href="{% url 'item_detail' pk=item.pk %}" style="margin-left:.5rem"><i class="fa fa-pencil-alt grey-text"></i></a>
+                                <a href="{% url 'item_detail' pk=item.pk %}" style="margin-left:.5rem"><i class="fa fa-times red-text text-darken-2"></i></a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">
+                                There are no items available
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <ul class="pagination">
+                    {% for page in paginations %}
+                        {% if page == pagination %}
+                        <li class="active"><a href="{% url 'pricelist' %}?p={{ page }}&f={{ filter_pattern }}">{{ page }}</a></li>
+                        {% else %}
+                        <li class="waves-effect"><a href="{% url 'pricelist' %}?p={{ page }}&f={{ filter_pattern }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}
