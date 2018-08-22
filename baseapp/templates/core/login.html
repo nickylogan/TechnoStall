@@ -14,7 +14,7 @@
         <div class="login-form-header">
             <h1>TECHNOSTALL MANAGER</h1>
         </div>
-        <form class="login-form" method="POST" action="{% url 'login' %}">
+        <form class="login-form" method="POST">
             <h2>Login</h2>
             {% csrf_token %}
             {% if next %}

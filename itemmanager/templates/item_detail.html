@@ -1,0 +1,87 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'pricelist' %}" class="breadcrumb" style="font-size:1rem">Pricelist</a>
+                    <a class="breadcrumb" style="font-size:1rem">{{ item.item_name }}</a>
+                </div>
+            </div>
+        </nav>
+                            
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title row">
+                    <h4 class="col s12 m6 l8" style="margin: 0">
+                        {{ item.item_name }}
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <a href="{% url 'item_edit' pk=item.pk %}" class="grey-text text-darken-2"><i class="fa fa-pencil-alt"></i> Edit</a> | 
+                        <a href="#delete-modal" class="grey-text text-lighten-1 modal-trigger">Delete</a>
+                        <table class="clean">
+                            <tbody>
+                                <tr>
+                                    <th>Stock</th>
+                                    <td>{{ item.item_stock }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Price</th>
+                                    <td>Rp {{ item.item_price|floatformat:0|intcomma }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Created at</th>
+                                    <td>{{ item.date_created }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    {% if item.description %}
+                                    <td>{{ item.description }}</td>
+                                    {% else %}
+                                    <td>-</td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <th>Last restock</th>
+                                    {% if restock %}
+                                    <td>{{ restock.date_created }}</td>
+                                    {% else %}
+                                    <td>-</td>
+                                    {% endif %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if item.item_image %}
+                    <div class="col s12 l6">
+                        <img src="{{ item.item_image.url }}" class="responsive-image"/>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h4>This action is <span class="red-text">IRREVERSIBLE</span></h4>
+        <p>Are you sure you want to <span class="red-text">DELETE</span> item: {{ item.item_name }}?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="{% url 'item_delete' pk=item.pk %}" class="modal-close waves-effect waves-red btn-flat">CONTINUE</a>
+        <a class="modal-close waves-effect btn amber darken-4 white-text">CANCEL</a>
+    </div>
+</div>
+{% endblock dashboard_content %}
+
+{% block dashboard_scripts %}
+    <script>
+        $(document).ready(() => $('.modal').modal());
+    </script>
+{% endblock dashboard_scripts %}

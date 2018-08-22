@@ -10,9 +10,31 @@
 <link rel="stylesheet" href="{% static 'css/materialize.css' %}">
 <link rel="stylesheet" href="{% static 'perfect-scrollbar/perfect-scrollbar.css' %}">
 <link rel="stylesheet" href="{% static 'css/dashboard.min.css' %}">
+<link rel="stylesheet" href="{% static 'dropify/css/dropify.min.css' %}">
 <style>
 .nav-active {
   border-right: solid .3rem #263238;
+}
+.search-wrapper {
+  position: relative;
+}
+.search-wrapper .label-icon {
+  position: absolute;
+  bottom: 30%;
+}
+.search-wrapper input[type="search"] {
+  padding-left: 2.5rem;
+  width: calc(100% - 2.5rem);
+}
+table.clean tr {
+  border: none;
+}
+.input-field input[type=text]:focus + label {
+  color: #ff6f00 ;
+}
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid #ff6f00;
+  box-shadow: 0 1px 0 0 #ff6f00;
 }
 </style>
 
@@ -115,9 +137,15 @@
                 </a>
             </li>
             <li class="bold">
-              <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
+              <a href="{% url 'pricelist' %}" class="waves-effect {% if active_tab == 'item' %}nav-active{% endif %}">
                   <i class="fa fa-clipboard-list" style="font-size: 1rem;"></i>
                   <span class="nav-text">Pricelist</span>
+                </a>
+            </li>
+            <li class="bold">
+              <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+                  <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
+                  <span class="nav-text">Sales</span>
                 </a>
             </li>
             <li class="bold">
@@ -125,12 +153,6 @@
                     <i class="fa fa-redo" style="font-size: 1rem;"></i>
                     <span class="nav-text">Restock</span>
                   </a>
-              </li>
-            <li class="bold">
-              <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'summary' %}nav-active{% endif %}">
-                  <i class="fa fa-chart-bar" style="font-size: 1rem;"></i>
-                  <span class="nav-text">Your summary</span>
-                </a>
             </li>
             <li class="bold">
               <a href="cards-basic.html" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
@@ -180,6 +202,12 @@
 <script src="{% static 'js/materialize.min.js' %}"></script>
 <script src="{% static 'perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
 <script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'dropify/js/dropify.min.js' %}"></script>
+<script type="text/javascript">
+  $(window).ready(() => {
+    $('.dropify').dropify();
+  });
+</script>
 {% block dashboard_scripts %}
 
 {% endblock dashboard_scripts %}
