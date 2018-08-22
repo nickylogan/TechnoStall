@@ -34,7 +34,7 @@
                         <th>Price</th>
                     </tr>
                     {% for item in items %}
-                        <tr onclick="location.href='{% url 'item_detail' pk=item.pk %}'" style="cursor:pointer">
+                        <tr onclick="location.href=`{% url 'item_detail' pk=item.pk %}`" style="cursor:pointer">
                             <td>{{ forloop.counter|add:min_item_index }}</td>
                             <td>{{ item.item_name }}</td>
                             <td>{{ item.item_stock }}</td>

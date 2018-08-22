@@ -23,8 +23,10 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m6">
+                        {% if request.session.ts_user.is_admin %}
                         <a href="{% url 'item_edit' pk=item.pk %}" class="grey-text text-darken-2"><i class="fa fa-pencil-alt"></i> Edit</a> | 
                         <a href="#delete-modal" class="grey-text text-lighten-1 modal-trigger">Delete</a>
+                        {% endif %}
                         <table class="clean">
                             <tbody>
                                 <tr>
