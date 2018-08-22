@@ -143,7 +143,7 @@ table.clean tr {
                 </a>
             </li>
             <li class="bold">
-              <a href="javascript:void(0)" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
+              <a href="{% url 'sale_list' %}" class="waves-effect {% if active_tab == 'sale' %}nav-active{% endif %}">
                   <i class="fa fa-dollar-sign" style="font-size: 1rem;"></i>
                   <span class="nav-text">Sales</span>
                 </a>
@@ -209,6 +209,5 @@ table.clean tr {
   });
 </script>
 {% block dashboard_scripts %}
-
 {% endblock dashboard_scripts %}
 {% endblock scripts %}
