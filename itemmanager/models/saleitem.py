@@ -8,7 +8,8 @@ from . import Item, Sale
 
 
 class SaleItemManager(models.Manager):
-    pass
+    def sale_total_amount(self, item):
+        return super().get_queryset().filter(item=item).aggregate(models.Sum('sale_amount'))['sale_amount__sum'] or 0
 
 
 class SaleItem(models.Model):
