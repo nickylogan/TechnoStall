@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from baseapp.decorators import admin_required
-from itemmanager.models import Item, Restock, RestockItem
+from itemmanager.models import *
 from itemmanager.forms import ItemForm
 import math
 
@@ -34,7 +34,8 @@ def item_detail(request, pk):
     restocks = RestockItem.objects.filter(item=item).order_by('-restock__date_created')
     return render(request, 'item_detail.html', {
         'item': item,
-        'restock': restocks[0] if restocks else None
+        'restock': restocks[0] if restocks else None,
+        'active_tab': 'item'
         })
 
 @admin_required
@@ -52,7 +53,7 @@ def item_edit(request, pk):
             return redirect('item_detail', pk=item.pk)
     else:
         form = ItemForm(instance=item)
-        return render(request, 'item_edit.html', {'form': form, 'item_pk': item.pk})
+        return render(request, 'item_edit.html', {'form': form, 'item_pk': item.pk, 'active_tab': 'item'})
 
 @admin_required
 def item_delete(request, pk):
@@ -76,11 +77,38 @@ def restock_detail(request):
 
 @login_required
 def sale_list(request):
-    pass
+    pagination = request.GET.get('p', '') or 1
+    try:
+        pagination = int(pagination) - 1
+    except ValueError:
+        pagination = 0
+    pagination = pagination if pagination > 0 else 0
+    sales_per_page = 10
+    sales = Sale.objects.order_by('-date_created').filter(user_on_duty=request.user)
+    max_pagination = math.ceil(sales.count() / sales_per_page)
+    min_sale_index = pagination*sales_per_page
+    return render(request, 'sale_list.html', {
+        'sales': sales[min_sale_index:min_sale_index+sales_per_page], 
+        'paginations': range(1,max_pagination+1),
+        'pagination': pagination + 1,
+        'min_sale_index': min_sale_index,
+        'active_tab': 'sale'
+        })
 
 @login_required
 def sale_new(request):
-    pass
+    items = Item.objects.all()
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'sale_new.html', {'items': items})
 
 @login_required
 def sale_detail(request):
@@ -90,3 +118,6 @@ def sale_detail(request):
 def sale_edit(request):
     pass
 
+@admin_required
+def sale_delete(request):
+    pass
