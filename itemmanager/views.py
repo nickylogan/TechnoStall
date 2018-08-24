@@ -71,6 +71,10 @@ def restock_new(request):
 def restock_detail(request):
     pass
 
+@admin_required
+def restock_delete(request):
+    pass
+
 @login_required
 def sale_list(request):
     pagination = request.GET.get('p', '') or 1
