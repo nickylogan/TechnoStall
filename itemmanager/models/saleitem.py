@@ -28,7 +28,7 @@ class SaleItem(models.Model):
 
     def clean(self):
         errors = {}
-        if self.item.item_availability == False:
+        if not self.item.item_availability:
             errors['item'] = ValidationError(
                 _('Item not available!'), code='invalid')
         if self.sale_amount > self.item.item_stock:

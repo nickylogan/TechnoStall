@@ -98,16 +98,16 @@ def sale_list(request):
 @login_required
 def sale_new(request):
     items = Item.objects.all()
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
-    else:
-        form = PostForm()
+    # if request.method == "POST":
+    #     form = PostForm(request.POST)
+    #     if form.is_valid():
+    #         post = form.save(commit=False)
+    #         post.author = request.user
+    #         post.published_date = timezone.now()
+    #         post.save()
+    #         return redirect('post_detail', pk=post.pk)
+    # else:
+    #     form = PostForm()
     return render(request, 'sale_new.html', {'items': items})
 
 @login_required
