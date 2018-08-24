@@ -5,7 +5,7 @@
 version: 2
 jobs:
   build:
-    parallelism: 4
+    parallelism: 2
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -64,7 +64,7 @@ jobs:
           path: test-reports
           destination: test-reports
   deploy:
-    parallelism: 4
+    parallelism: 2
     docker:
       - image: buildpack-deps:trusty
     steps:
