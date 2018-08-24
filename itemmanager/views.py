@@ -64,10 +64,6 @@ def restock_list(request):
     pass
 
 @admin_required
-def restock_edit(request):
-    pass
-
-@admin_required
 def restock_new(request):
     pass
 
@@ -112,10 +108,6 @@ def sale_new(request):
 
 @login_required
 def sale_detail(request):
-    pass
-
-@admin_required
-def sale_edit(request):
     pass
 
 @admin_required
