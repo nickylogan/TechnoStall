@@ -13,14 +13,16 @@ jobs:
         environment:
           ALLOWED_HOSTS: .localhost, .testserver, .herokuapp.com
           DEBUG: True
+          DB_USER: root
+          DB_NAME: circle_test
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       - image: circleci/postgres:10-alpine
         environment:
-          DB_USER: root
-          DB_NAME: circle_test
+          POSTGRES_USER: root
+          POSTGRES_DB: circle_test
 
     working_directory: ~/repo
 
