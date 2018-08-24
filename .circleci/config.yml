@@ -64,6 +64,7 @@ jobs:
           path: test-reports
           destination: test-reports
   deploy:
+    parallelism: 4
     docker:
       - image: buildpack-deps:trusty
     steps:
