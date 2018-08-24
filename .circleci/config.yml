@@ -12,6 +12,7 @@ jobs:
       - image: circleci/python:3.7-browsers
         environment:
           ALLOWED_HOSTS: .localhost, .testserver, .herokuapp.com
+          DEBUG: True
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
