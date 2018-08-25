@@ -52,28 +52,50 @@ class ItemDetailView(TemplateView):
             })
     
 
-@admin_required
-def item_new(request):
-    pass
+class ItemNewView(TemplateView):
+    model = Item
+    template_name = 'item_edit.html'
 
-@admin_required
-def item_edit(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    if request.method == "POST":
+    @method_decorator(admin_required)
+    def post(self, request, *args, **kwargs):
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.save()
+            return redirect('item_detail', pk=item.pk)
+        else:
+            return render(request, self.template_name, {'form': form, 'active_tab': 'item'})    
+    
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        form = ItemForm()
+        return render(request, self.template_name, {'form': form, 'active_tab': 'item'})
+
+class ItemEditView(TemplateView):
+    model = Item
+    template_name = 'item_edit.html'
+
+    @method_decorator(admin_required)
+    def post(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, pk=pk)
         form = ItemForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
             item = form.save(commit=False)
             item.save()
             return redirect('item_detail', pk=item.pk)
-    else:
+        else:
+            return render(request, self.template_name, {'form': form, 'active_tab': 'item'})    
+    
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, pk=pk)
         form = ItemForm(instance=item)
-        return render(request, 'item_edit.html', {'form': form, 'item_pk': item.pk, 'active_tab': 'item'})
+        return render(request, self.template_name, {'form': form, 'item_pk': item.pk, 'active_tab': 'item'})
 
 @admin_required
 def item_delete(request, pk):
     if request.method == "POST":
         pass
-
 
 @admin_required
 def restock_list(request):

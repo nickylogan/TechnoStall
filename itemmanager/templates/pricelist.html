@@ -26,6 +26,13 @@
                         </form>
                     </div>
                 </div>
+                <div class="row">
+                    {% if request.session.ts_user.is_admin %}
+                    <a class="btn-small white waves-effect black-text" style="margin-left: 1rem" href="{% url 'item_new' %}">
+                        + Add item
+                    </a>
+                    {% endif %}
+                </div>
                 <table class="bordered highlight">
                     <tr>
                         <th>No</th>
