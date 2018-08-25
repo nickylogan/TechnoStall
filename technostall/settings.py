@@ -126,6 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+LOGIN_URL = '/login/'
+
 LOGIN_REDIRECT_URL = 'dashboard'
 
 TIME_ZONE = 'Asia/Jakarta'
