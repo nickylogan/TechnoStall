@@ -45,7 +45,7 @@ class ItemDetailView(TemplateView):
     def get(self, request, *args, **kwargs):
         item = get_object_or_404(Item, pk=self.kwargs['pk'])
         restocks = RestockItem.objects.filter(item=item).order_by('-restock__date_created')
-        return render(request, 'item_detail.html', {
+        return render(request, self.template_name, {
             'item': item,
             'restock': restocks[0] if restocks else None,
             'active_tab': 'item'
