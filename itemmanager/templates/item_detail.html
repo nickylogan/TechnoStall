@@ -76,8 +76,11 @@
         <p>Are you sure you want to <span class="red-text">DELETE</span> item: {{ item.item_name }}?</p>
     </div>
     <div class="modal-footer">
-        <a href="{% url 'item_delete' pk=item.pk %}" class="modal-close waves-effect waves-red btn-flat">CONTINUE</a>
+        <form method="POST" action="{% url 'item_delete' pk=item.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="modal-close waves-effect waves-red btn-flat">CONTINUE</button>
         <a class="modal-close waves-effect btn amber darken-4 white-text">CANCEL</a>
+        </form>
     </div>
 </div>
 {% endblock dashboard_content %}
