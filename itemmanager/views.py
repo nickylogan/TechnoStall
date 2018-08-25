@@ -1,32 +1,40 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
+
 from baseapp.decorators import admin_required
 from itemmanager.models import *
 from itemmanager.forms import ItemForm
+
 import math
 
-@login_required
-def pricelist(request):
-    filter_pattern = request.GET.get('f', '') or ''
-    pagination = request.GET.get('p', '') or 1
-    try:
-        pagination = int(pagination) - 1
-    except ValueError:
-        pagination = 0
-    pagination = pagination if pagination > 0 else 0
-    item_per_page = 10
-    items = Item.objects.order_by('item_name').filter(item_name__contains=filter_pattern)
-    max_pagination = math.ceil(items.count() / item_per_page)
-    min_item_index = pagination*item_per_page
-    return render(request, 'pricelist.html', {
-        'items': items[min_item_index:min_item_index+item_per_page], 
-        'paginations': range(1,max_pagination+1),
-        'pagination': pagination + 1,
-        'min_item_index': min_item_index,
-        'filter_pattern': filter_pattern,
-        'active_tab': 'item'
-        })
+class PricelistView(TemplateView):
+    template_name = 'pricelist.html'
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        filter_pattern = request.GET.get('f', '') or ''
+        pagination = request.GET.get('p', '') or 1
+        try:
+            pagination = int(pagination) - 1
+        except ValueError:
+            pagination = 0
+        pagination = pagination if pagination > 0 else 0
+        item_per_page = 10
+        items = Item.objects.order_by('item_name').filter(item_name__contains=filter_pattern)
+        max_pagination = math.ceil(items.count() / item_per_page)
+        min_item_index = pagination*item_per_page
+        return render(request, self.template_name, {
+            'items': items[min_item_index:min_item_index+item_per_page], 
+            'paginations': range(1,max_pagination+1),
+            'pagination': pagination + 1,
+            'min_item_index': min_item_index,
+            'filter_pattern': filter_pattern,
+            'active_tab': 'item'
+            })
+
 
 @login_required
 def item_detail(request, pk):
@@ -57,7 +65,9 @@ def item_edit(request, pk):
 
 @admin_required
 def item_delete(request, pk):
-    pass
+    if request.method == "POST":
+        pass
+
 
 @admin_required
 def restock_list(request):
