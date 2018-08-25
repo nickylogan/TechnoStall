@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
 
 from baseapp.decorators import admin_required
 from itemmanager.models import *
@@ -11,6 +12,7 @@ from itemmanager.forms import ItemForm
 import math
 
 class PricelistView(TemplateView):
+    model = Item
     template_name = 'pricelist.html'
 
     @method_decorator(login_required)
@@ -35,16 +37,20 @@ class PricelistView(TemplateView):
             'active_tab': 'item'
             })
 
+class ItemDetailView(TemplateView):
+    model = Item
+    template_name = 'item_detail.html'
 
-@login_required
-def item_detail(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    restocks = RestockItem.objects.filter(item=item).order_by('-restock__date_created')
-    return render(request, 'item_detail.html', {
-        'item': item,
-        'restock': restocks[0] if restocks else None,
-        'active_tab': 'item'
-        })
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        restocks = RestockItem.objects.filter(item=item).order_by('-restock__date_created')
+        return render(request, 'item_detail.html', {
+            'item': item,
+            'restock': restocks[0] if restocks else None,
+            'active_tab': 'item'
+            })
+    
 
 @admin_required
 def item_new(request):
