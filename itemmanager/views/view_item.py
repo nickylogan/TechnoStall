@@ -11,6 +11,7 @@ from itemmanager.forms import ItemForm
 
 import math
 
+
 class PricelistView(TemplateView):
     model = Item
     template_name = 'pricelist.html'
@@ -25,17 +26,20 @@ class PricelistView(TemplateView):
             pagination = 0
         pagination = pagination if pagination > 0 else 0
         item_per_page = 10
-        items = Item.objects.order_by('item_name').filter(item_name__contains=filter_pattern)
+        items = Item.objects.order_by('item_name').filter(
+            item_name__contains=filter_pattern)
         max_pagination = math.ceil(items.count() / item_per_page)
         min_item_index = pagination*item_per_page
-        return render(request, self.template_name, {
-            'items': items[min_item_index:min_item_index+item_per_page], 
-            'paginations': range(1,max_pagination+1),
+        context = {
+            'items': items[min_item_index:min_item_index+item_per_page],
+            'paginations': range(1, max_pagination+1),
             'pagination': pagination + 1,
             'min_item_index': min_item_index,
             'filter_pattern': filter_pattern,
             'active_tab': 'item'
-            })
+        }
+        return render(request, self.template_name, context)
+
 
 class ItemDetailView(TemplateView):
     model = Item
@@ -44,13 +48,15 @@ class ItemDetailView(TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         item = get_object_or_404(Item, pk=self.kwargs['pk'])
-        restocks = RestockItem.objects.filter(item=item).order_by('-restock__date_created')
-        return render(request, self.template_name, {
+        restocks = RestockItem.objects.filter(
+            item=item).order_by('-restock__date_created')
+        context = {
             'item': item,
             'restock': restocks[0] if restocks else None,
             'active_tab': 'item'
-            })
-    
+        }
+        return render(request, self.template_name, context)
+
 
 class ItemNewView(TemplateView):
     model = Item
@@ -64,12 +70,15 @@ class ItemNewView(TemplateView):
             item.save()
             return redirect('item_detail', pk=item.pk)
         else:
-            return render(request, self.template_name, {'form': form, 'active_tab': 'item'})    
-    
+            context = {'form': form, 'active_tab': 'item'}
+            return render(request, self.template_name, context)
+
     @method_decorator(admin_required)
     def get(self, request, *args, **kwargs):
         form = ItemForm()
-        return render(request, self.template_name, {'form': form, 'active_tab': 'item'})
+        context = {'form': form, 'active_tab': 'item'}
+        return render(request, self.template_name, context)
+
 
 class ItemEditView(TemplateView):
     model = Item
@@ -85,13 +94,16 @@ class ItemEditView(TemplateView):
             notice = "Item %s was successfully changed" % item.item_name
             return redirect('item_detail', pk=item.pk)
         else:
-            return render(request, self.template_name, {'form': form, 'active_tab': 'item'})    
-    
+            context = {'form': form, 'active_tab': 'item'}
+            return render(request, self.template_name, context)
+
     @method_decorator(admin_required)
     def get(self, request, *args, **kwargs):
         item = get_object_or_404(Item, pk=self.kwargs['pk'])
         form = ItemForm(instance=item)
-        return render(request, self.template_name, {'form': form, 'item_pk': item.pk, 'active_tab': 'item'})
+        context = {'form': form, 'item_pk': item.pk, 'active_tab': 'item'}
+        return render(request, self.template_name, context)
+
 
 class ItemDeleteView(TemplateView):
     model = Item

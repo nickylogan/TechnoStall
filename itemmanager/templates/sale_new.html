@@ -1,5 +1,12 @@
 {% extends "core/dashboard.html" %}
 {% load humanize %}
+{% block dashboard_styles %}
+<style>
+    .select-wrapper input.select-dropdown {
+        margin-bottom: 0;
+    }
+</style>
+{% endblock dashboard_styles %}
 
 {% block dashboard_content %}
 <div class="row">
@@ -18,32 +25,41 @@
         </h4>
         <form id="sale-form" class="col s12" method="POST" onsubmit="return confirm('Are you sure?')">
             <div class="row">
-                <div class="col s9 m10">
+                <div class="col s7 m9">
                     <h6><b>Item</b></h6>
                 </div>
                 <div class="col s3 m2">
                     <h6><b>Quantity</b></h6> 
                 </div>
+                <div class="col s2 m1">
+                </div>
             </div>
             {% csrf_token %}
             <div id="sale-items">
                 <div class="row sale-item">
-                    <div class="col s9 m10">
-                        <select class="item-select" name="item">
-                            {% for item in items %}
-                                <option item-price="{{ item.item_price }}" value="{{ item.pk }}">{{ item.item_name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col s3 m2">
-                        <input name="quantity" type="number" class="validate" value="0" min="0">
+                    <div class="valign-wrapper">
+                        <div class="col s7 m9">
+                            <select class="item-select" name="item">
+                                {% for item in items %}
+                                    <option item-price="{{ item.item_price }}" value="{{ item.pk }}">{{ item.item_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col s3 m2">
+                            <input name="quantity" type="number" class="validate" value="0" min="0" style="margin-bottom: 0">
+                        </div>
+                        <div class="col s2 m1">
+                            <button class="delete-item btn-flat" type="button" style="padding-left: 10px; padding-right: 10px">
+                                <i class="fa fa-times red-text text-darken-4"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col s12 m6 l4">
+                <div class="col s12 m6 l3">
                     <a class="btn waves-effect grey" style="width:100%" id="item-add">
-                        <i class="fa fa-plus"></i>
+                        <i class="fas fa-plus" style="font-size:1rem; margin-right: .25rem"></i>
                         Add more items
                     </a>
                 </div>
@@ -61,10 +77,41 @@
 
 {% block dashboard_scripts %}
 <script>
-    $('#item-add').click(() => {
-        $d = $(`<div class="row sale-item"><div class="col s9 m10"><select class="item-select" name="item">{% for item in items %}<option item-price="{{ item.item_price }}" value="{{ item.pk }}">{{ item.item_name }}</option>{% endfor %}</select></div><div class="col s3 m2"><input name="quantity" type="number" class="validate" value="0" min="0"></div></div>`);
-        $('#sale-items').append($d);
-        var instances = M.FormSelect.init($d.find('select'), {});
-    })
+    function init() {
+        $('.delete-item').click((e) => {
+            $target = $(e.target.closest('.sale-item'));
+            $target.slideUp(250, function () {
+                $target.remove();
+            });
+        })
+    }
+    $(document).ready(() => {
+        init();
+        $('#item-add').click(() => {
+            component = `<div class="row sale-item">
+                    <div class="valign-wrapper">
+                        <div class="col s7 m9">
+                            <select class="item-select" name="item">
+                                {% for item in items %}
+                                    <option item-price="{{ item.item_price }}" value="{{ item.pk }}">{{ item.item_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col s3 m2">
+                            <input name="quantity" type="number" class="validate" value="0" min="0" style="margin-bottom: 0">
+                        </div>
+                        <div class="col s2 m1">
+                            <button class="delete-item btn-flat" type="button" style="padding-left: 10px; padding-right: 10px">
+                                <i class="fa fa-times red-text text-darken-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            $component = $(component);
+            $component.appendTo($('#sale-items')).slideDown("fast");
+            var instances = M.FormSelect.init($component.find('select'), {});
+            init();
+        })
+    });
 </script>
 {% endblock dashboard_scripts %}

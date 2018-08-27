@@ -7,22 +7,30 @@ from django.views.generic.detail import DetailView
 
 from baseapp.decorators import admin_required
 from itemmanager.models import *
-from itemmanager.forms import ItemForm
+from itemmanager.forms import RestockForm
 
 import math
 
-@admin_required
-def restock_list(request):
-    pass
+class RestockListView(TemplateView):
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        pass
 
-@admin_required
-def restock_new(request):
-    pass
+class RestockNewView(TemplateView):
+    @method_decorator(admin_required)
+    def post(self, request, *args, **kwargs):
+        pass
 
-@admin_required
-def restock_detail(request):
-    pass
+    @method_decorator(admin_required)
+    def post(self, request, *args, **kwargs):
+        pass
 
-@admin_required
-def restock_delete(request):
-    pass
+class RestockDetailView(TemplateView):
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        pass
+
+class RestockDeleteView(TemplateView):
+    @method_decorator(admin_required)
+    def post(self, request, *args, **kwargs):
+        pass
