@@ -208,6 +208,17 @@ table.clean tr {
     $('.dropify').dropify();
   });
 </script>
+{% if notice %}
+<script>
+    $(document).ready(() => {
+        M.toast({
+            html: {{ notice.content }}, 
+            classes: 'yellow',
+            displayLength: 2000
+        })
+    })
+</script>
+{% endif %}
 {% block dashboard_scripts %}
 {% endblock dashboard_scripts %}
 {% endblock scripts %}
