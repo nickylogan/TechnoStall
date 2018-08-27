@@ -77,25 +77,35 @@ class ItemEditView(TemplateView):
 
     @method_decorator(admin_required)
     def post(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=pk)
+        item = get_object_or_404(Item, pk=self.kwargs['pk'])
         form = ItemForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
             item = form.save(commit=False)
             item.save()
+            notice = "Item %s was successfully changed" % item.item_name
             return redirect('item_detail', pk=item.pk)
         else:
             return render(request, self.template_name, {'form': form, 'active_tab': 'item'})    
     
     @method_decorator(admin_required)
     def get(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=pk)
+        item = get_object_or_404(Item, pk=self.kwargs['pk'])
         form = ItemForm(instance=item)
         return render(request, self.template_name, {'form': form, 'item_pk': item.pk, 'active_tab': 'item'})
 
-@admin_required
-def item_delete(request, pk):
-    if request.method == "POST":
-        pass
+class ItemDeleteView(TemplateView):
+    model = Item
+
+    @method_decorator(admin_required)
+    def post(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        item.delete()
+        return redirect('pricelist')
+
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        return redirect('item_detail', pk=item.pk)
 
 @admin_required
 def restock_list(request):
