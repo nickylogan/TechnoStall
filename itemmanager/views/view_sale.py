@@ -95,6 +95,7 @@ class SaleNewView(TemplateView):
         context = self.get_context_data(saleitem_formset=saleitem_formset)
         return render(request, self.template_name, context)
 
+
 class SaleDetailView(TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
