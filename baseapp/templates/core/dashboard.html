@@ -131,7 +131,7 @@ table.clean tr {
         <li class="no-padding">
           <ul class="" data-collapsible="accordion">
             <li class="bold">
-                <a href="javascript:void(0)" class="waves-effect amber darken-4 white-text">
+                <a href="{% url 'sale_new' %}" class="waves-effect amber darken-4 white-text">
                     <i class="fa fa-plus white-text" style="font-size: 1rem;"></i>
                     <span class="nav-text">ADD SALE</span>
                 </a>
@@ -208,15 +208,15 @@ table.clean tr {
     $('.dropify').dropify();
   });
 </script>
-{% if notice %}
+{% if messages %}
 <script>
-    $(document).ready(() => {
-        M.toast({
-            html: {{ notice.content }}, 
-            classes: 'yellow',
-            displayLength: 2000
-        })
+  {% for message in messages %}
+    M.toast({
+      html: `{{ message|escape }}`, 
+      classes: `{{ message.tags }}`,
+      displayLength: 1500
     })
+  {% endfor %}
 </script>
 {% endif %}
 {% block dashboard_scripts %}
