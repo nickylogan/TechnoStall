@@ -1,4 +1,5 @@
 {% extends "core/dashboard.html" %}
+{% load static %}
 {% load humanize %}
 {% block dashboard_styles %}
 <style>
@@ -6,6 +7,9 @@
         margin-bottom: 0;
     }
 </style>
+<script>
+    var component = false;
+</script>
 {% endblock dashboard_styles %}
 
 {% block dashboard_content %}
@@ -19,7 +23,16 @@
                     <a class="breadcrumb" style="font-size:1rem">New</a>
                 </div>
             </div>
-        </nav>           
+        </nav>
+        {% if saleitem_formset.non_form_errors %}
+        <div class="card red-text">
+            <div class="card-content">
+                {% for error in saleitem_formset.non_form_errors %}
+                    {{ error|escape }}<br>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
         <h4 style="padding: 0 0.75rem">
             New sale
         </h4>
@@ -35,30 +48,48 @@
                 </div>
             </div>
             {% csrf_token %}
+            {{ saleitem_formset.management_form }}
             <div id="sale-items">
+            {% for saleitem_form in saleitem_formset %}
+                {% if forloop.first %}
+                <script>
+                    var component = `<div class="row sale-item">
+                                <div class="valign-wrapper">
+                                    <div class="col s7 m9">
+                                        {{ saleitem_form.item }}
+                                    </div>
+                                    <div class="col s3 m2">
+                                        {{ saleitem_form.quantity }}
+                                    </div>
+                                    <div class="col s2 m1">
+                                        <button class="delete-item btn-flat" type="button" style="padding-left: 10px; padding-right: 10px">
+                                            <i class="fa fa-minus red-text text-darken-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>`
+                </script>
+                {% endif %}
                 <div class="row sale-item">
                     <div class="valign-wrapper">
                         <div class="col s7 m9">
-                            <select class="item-select" name="item">
-                                {% for item in items %}
-                                    <option item-price="{{ item.item_price }}" value="{{ item.pk }}">{{ item.item_name }}</option>
-                                {% endfor %}
-                            </select>
+                            {{ saleitem_form.item }}
                         </div>
                         <div class="col s3 m2">
-                            <input name="quantity" type="number" class="validate" value="0" min="0" style="margin-bottom: 0">
+                            {{ saleitem_form.quantity }}
                         </div>
                         <div class="col s2 m1">
                             <button class="delete-item btn-flat" type="button" style="padding-left: 10px; padding-right: 10px">
-                                <i class="fa fa-times red-text text-darken-4"></i>
+                                <i class="fa fa-minus red-text text-darken-4"></i>
                             </button>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
             <div class="row">
                 <div class="col s12 m6 l3">
-                    <a class="btn waves-effect grey" style="width:100%" id="item-add">
+                    <a class="btn waves-effect grey add-item" style="width:100%">
                         <i class="fas fa-plus" style="font-size:1rem; margin-right: .25rem"></i>
                         Add more items
                     </a>
@@ -77,41 +108,53 @@
 
 {% block dashboard_scripts %}
 <script>
-    function init() {
-        $('.delete-item').click((e) => {
-            $target = $(e.target.closest('.sale-item'));
-            $target.slideUp(250, function () {
-                $target.remove();
-            });
-        })
+    function updateElementIndex(el, prefix, ndx) {
+        var id_regex = new RegExp('(' + prefix + '-\\d+)');
+        var replacement = prefix + '-' + ndx;
+        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
     }
-    $(document).ready(() => {
-        init();
-        $('#item-add').click(() => {
-            component = `<div class="row sale-item">
-                    <div class="valign-wrapper">
-                        <div class="col s7 m9">
-                            <select class="item-select" name="item">
-                                {% for item in items %}
-                                    <option item-price="{{ item.item_price }}" value="{{ item.pk }}">{{ item.item_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col s3 m2">
-                            <input name="quantity" type="number" class="validate" value="0" min="0" style="margin-bottom: 0">
-                        </div>
-                        <div class="col s2 m1">
-                            <button class="delete-item btn-flat" type="button" style="padding-left: 10px; padding-right: 10px">
-                                <i class="fa fa-times red-text text-darken-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>`;
-            $component = $(component);
-            $component.appendTo($('#sale-items')).slideDown("fast");
-            var instances = M.FormSelect.init($component.find('select'), {});
-            init();
-        })
+
+    $(document).on('click', '.add-item', function(e) {
+        // add component
+        $component = $(component);
+        $component.find('option').removeAttr('selected');
+        $component.find(':input').removeAttr('value');
+        $component.appendTo($('#sale-items')).slideDown("fast");
+        var instances = M.FormSelect.init($component.find('select'), {});
+
+        // change total value in #id_form-TOTAL_FORMS
+        var total = $('#id_form-TOTAL_FORMS').val();
+        var $forms = $('.sale-item');
+        $('#id_form-TOTAL_FORMS').val(parseInt(total) + 1);
+
+        // update indices
+        for (var i=0, formCount=$forms.length; i<formCount; i++) {
+            $($forms.get(i)).find(':input').each(function(idx, val) {
+                updateElementIndex(this, 'form', i);
+            });
+        }
+    });
+    $(document).on('click', '.delete-item', function(e) {
+        // remove target
+        var $target = $(e.target);
+        var $deleted = $target.closest('.sale-item');
+        $deleted.slideUp(250, function () {
+            $deleted.remove();
+        });
+
+        // change total value in #id_form-TOTAL_FORMS
+        var total = $('#id_form-TOTAL_FORMS').val();
+        var $forms = $('.sale-item');
+        $('#id_form-TOTAL_FORMS').val(parseInt(total) - 1);
+
+        // update indices
+        for (var i=0, formCount=$forms.length; i<formCount; i++) {
+            $($forms.get(i)).find(':input').each(function(idx, val) {
+                updateElementIndex(this, 'form', i);
+            });
+        }
     });
 </script>
 {% endblock dashboard_scripts %}
