@@ -1,0 +1,53 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'sale_list' %}" class="breadcrumb" style="font-size:1rem">Restocks</a>
+                </div>
+            </div>
+        </nav>
+                            
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title row" style="margin-bottom: 1rem">
+                    <h4 class="col s8 l11" style="margin: 0">
+                        Restock
+                    </h4>
+                    <a href="{% url 'sale_new' %}" class="col s4 l1 btn-small amber darken-4">
+                        <i class="fa fa-plus"></i>
+                        <span>Add</span>
+                    </a>
+                </div>
+                <table>
+                {% for restock in restocks %}
+                    <tr class="" onclick="location.href=`{% url 'restock_detail' pk=restock.pk %}`">
+                        <h4>
+                            Restock #{{ restock.pk }}
+                        </h4>
+                        <p>{{ restock.date_created }}</p>
+                        <p>Rp 0</p>
+                    </tr>
+                    {% empty %}
+                    <p>There are no restocks yet</p>
+                {% endfor %}
+                </table>
+                <ul class="pagination">
+                    {% for page in paginations %}
+                        {% if page == pagination %}
+                        <li class="active"><a href="{% url 'pricelist' %}?p={{ page }}">{{ page }}</a></li>
+                        {% else %}
+                        <li class="waves-effect"><a href="{% url 'pricelist' %}?p={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}

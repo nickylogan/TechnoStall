@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -68,6 +69,8 @@ class ItemNewView(TemplateView):
         if form.is_valid():
             item = form.save(commit=False)
             item.save()
+            notice = "Item %s was successfully created" % item.item_name
+            messages.success(request, notice, extra_tags='green rounded')    
             return redirect('item_detail', pk=item.pk)
         else:
             context = {'form': form, 'active_tab': 'item'}
@@ -92,6 +95,7 @@ class ItemEditView(TemplateView):
             item = form.save(commit=False)
             item.save()
             notice = "Item %s was successfully changed" % item.item_name
+            messages.success(request, notice, extra_tags='green rounded')
             return redirect('item_detail', pk=item.pk)
         else:
             context = {'form': form, 'active_tab': 'item'}
@@ -111,7 +115,9 @@ class ItemDeleteView(TemplateView):
     @method_decorator(admin_required)
     def post(self, request, *args, **kwargs):
         item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        notice = "Item %s was successfully deleted" % item.item_name
         item.delete()
+        messages.success(request, notice, extra_tags='green rounded')
         return redirect('pricelist')
 
     @method_decorator(admin_required)
