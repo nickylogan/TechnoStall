@@ -12,7 +12,7 @@ class SaleTestCase(TestCase):
         self.user = User.objects.create_user('test','test@email.com','justpass')
         
         from itemmanager.models import Restock, RestockItem
-        self.restock = Restock.objects.create(restock_PIC='testpic')
+        self.restock = Restock.objects.create(restock_PIC=self.user)
         self.restock_item = RestockItem.objects.create(restock=self.restock, item=self.item_d, restock_item_amount=100, restock_item_total_cost=0)
         
         self.sale = Sale.objects.create(user_on_duty=self.user)
