@@ -17,10 +17,9 @@ class PricelistView(TemplateView):
     model = Item
     template_name = 'pricelist.html'
 
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        filter_pattern = request.GET.get('f', '') or ''
-        pagination = request.GET.get('p', '') or 1
+    def get_context_data(self, *args, **kwargs):
+        filter_pattern = kwargs.get('filter')
+        pagination = kwargs.get('page')
         try:
             pagination = int(pagination) - 1
         except ValueError:
@@ -28,7 +27,7 @@ class PricelistView(TemplateView):
         pagination = pagination if pagination > 0 else 0
         item_per_page = 10
         items = Item.objects.order_by('item_name').filter(
-            item_name__contains=filter_pattern)
+            item_name__icontains=filter_pattern)
         max_pagination = math.ceil(items.count() / item_per_page)
         min_item_index = pagination*item_per_page
         context = {
@@ -39,6 +38,13 @@ class PricelistView(TemplateView):
             'filter_pattern': filter_pattern,
             'active_tab': 'item'
         }
+        return context
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        filter_pattern = request.GET.get('f', '') or ''
+        pagination = request.GET.get('p', '') or 1
+        context = self.get_context_data(filter=filter_pattern, page=pagination)
         return render(request, self.template_name, context)
 
 
@@ -46,9 +52,8 @@ class ItemDetailView(TemplateView):
     model = Item
     template_name = 'item_detail.html'
 
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+    def get_context_data(self, *args, **kwargs):
+        item = kwargs.get('item')
         restocks = RestockItem.objects.filter(
             item=item).order_by('-restock__date_created')
         context = {
@@ -56,6 +61,12 @@ class ItemDetailView(TemplateView):
             'restock': restocks[0] if restocks else None,
             'active_tab': 'item'
         }
+        return context
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, pk=self.kwargs.get('pk'))
+        context = self.get_context_data(item=item)
         return render(request, self.template_name, context)
 
 
@@ -89,7 +100,7 @@ class ItemEditView(TemplateView):
 
     @method_decorator(admin_required)
     def post(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        item = get_object_or_404(Item, pk=self.kwargs.get('pk'))
         form = ItemForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
             item = form.save(commit=False)
@@ -103,7 +114,7 @@ class ItemEditView(TemplateView):
 
     @method_decorator(admin_required)
     def get(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        item = get_object_or_404(Item, pk=self.kwargs.get('pk'))
         form = ItemForm(instance=item)
         context = {'form': form, 'item_pk': item.pk, 'active_tab': 'item'}
         return render(request, self.template_name, context)
@@ -114,7 +125,7 @@ class ItemDeleteView(TemplateView):
 
     @method_decorator(admin_required)
     def post(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        item = get_object_or_404(Item, pk=self.kwargs.get('pk'))
         notice = "Item %s was successfully deleted" % item.item_name
         item.delete()
         messages.success(request, notice, extra_tags='green rounded')
@@ -122,5 +133,5 @@ class ItemDeleteView(TemplateView):
 
     @method_decorator(admin_required)
     def get(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, pk=self.kwargs['pk'])
+        item = get_object_or_404(Item, pk=self.kwargs.get('pk'))
         return redirect('item_detail', pk=item.pk)

@@ -27,4 +27,4 @@ class RestockItem(models.Model):
         unique_together = (("restock", "item"))
 
     def __str__(self):
-        return "%d %s(s) for %d" % (self.item.item_name, self.restock_item_amount, self.restock_item_total_cost)
+        return "%d %s(s) for %d" % (self.restock_item_amount, self.item.item_name, self.restock_item_total_cost)

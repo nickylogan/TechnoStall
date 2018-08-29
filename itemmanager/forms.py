@@ -2,14 +2,14 @@ from django import forms
 from django.forms import formset_factory, inlineformset_factory
 from django.forms.formsets import BaseFormSet
 from django.utils.translation import gettext_lazy as _
-from .models import Item
+from .models import *
 from collections import defaultdict
 
 
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ('item_name', 'item_price', 'item_image', 'description')
+        fields = ('item_name', 'item_price', 'item_image', 'description', )
 
 
 class SaleItemForm(forms.Form):
@@ -46,6 +46,7 @@ class BaseSaleItemFormSet(BaseFormSet):
                 sales[item] += quantity
 
         for item, sale_amount in sales.items():
+            print(item.item_stock, sale_amount)
             if sale_amount > item.item_stock:
                 errors += [
                     forms.ValidationError(
@@ -58,10 +59,26 @@ class BaseSaleItemFormSet(BaseFormSet):
             raise forms.ValidationError(errors)
 
 
-class SaleForm(forms.Form):
+class RestockForm(forms.ModelForm):
+    class Meta:
+        model = Restock
+        fields = ('restock_proof_of_payment', )
+
+class RestockItemForm(forms.Form):
+    quantity = forms.IntegerField(widget=forms.TextInput(
+        attrs={'style': 'margin-bottom: 0', 'type': 'number'}))
+    
+    cost = forms.FloatField(widget=forms.TextInput(
+        attrs={'style': 'margin-bottom: 0', 'type': 'number', 'step': '0.01'}))
+
     def __init__(self, *args, **kwargs):
-        pass
+        super(RestockItemForm, self).__init__(*args, **kwargs)
+        items = Item.objects.all().order_by('item_name')
+        item_choices = ()
+        for item in items:
+            item_choices = item_choices + ((item.pk, _(item.item_name)),)
+        self.fields['item'] = forms.ChoiceField(
+            choices=item_choices, label='', widget=forms.Select(attrs={'class': 'item-select'}))
 
-
-class RestockForm(forms.Form):
+class BaseRestockItemFormSet(BaseFormSet):
     pass

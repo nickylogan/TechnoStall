@@ -9,8 +9,9 @@ from django.views.generic.detail import DetailView
 
 from baseapp.decorators import admin_required
 from itemmanager.models import *
-from itemmanager.forms import SaleForm, SaleItemForm, BaseSaleItemFormSet
+from itemmanager.forms import SaleItemForm, BaseSaleItemFormSet
 
+from collections import defaultdict
 import math
 
 
@@ -18,9 +19,9 @@ class SaleListView(TemplateView):
     model = Sale
     template_name = 'sale_list.html'
 
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        pagination = request.GET.get('p', '') or 1
+    def get_context_data(self, *args, **kwargs):
+        pagination = kwargs.get('page')
+        request = kwargs.get('request')
         try:
             pagination = int(pagination) - 1
         except ValueError:
@@ -40,66 +41,67 @@ class SaleListView(TemplateView):
             'min_sale_index': min_sale_index,
             'active_tab': 'sale'
         }
+        return context
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        pagination = request.GET.get('p', '') or 1
+        context = self.get_context_data(page=pagination, request=request)
         return render(request, self.template_name, context)
 
 
 class SaleNewView(TemplateView):
     template_name = 'sale_new.html'
+    SaleItemFormSet = formset_factory(
+            SaleItemForm, formset=BaseSaleItemFormSet)
 
     def get_context_data(self, *args, **kwargs):
         context = {
-            'saleitem_formset': kwargs['saleitem_formset'],
+            'saleitem_formset': kwargs.get('formset'),
             'active_tab': 'sale'
         }
         return context
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        SaleItemFormSet = formset_factory(
-            SaleItemForm, formset=BaseSaleItemFormSet)
-        saleitem_formset = SaleItemFormSet()
+        saleitem_formset = self.SaleItemFormSet()
 
-        context = self.get_context_data(saleitem_formset=saleitem_formset)
+        context = self.get_context_data(formset=saleitem_formset)
         return render(request, self.template_name, context)
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
-        SaleItemFormSet = formset_factory(
-            SaleItemForm, formset=BaseSaleItemFormSet)
-        saleitem_formset = SaleItemFormSet(request.POST)
-        print(request.POST)
-        print(saleitem_formset.is_valid())
+        saleitem_formset = self.SaleItemFormSet(request.POST)
+        saleitem_formset.clean()
         if saleitem_formset.is_valid():
             # Create sale
             sale = Sale(user_on_duty=request.user)
             sale.save()
 
-            # Save all sale items
+            # Make unique
+            sales = defaultdict(int)
             for saleitem_form in saleitem_formset:
                 item_pk = saleitem_form.cleaned_data.get('item')
                 quantity = saleitem_form.cleaned_data.get('quantity')
                 item = Item.objects.get(pk=item_pk)
-                sale_item = SaleItem(
-                    sale=sale, item=item, sale_amount=quantity, sale_price=item.item_price)
+                sales[item] += quantity
+
+            # Save all saleitems
+            for item, quantity in sales.items():
+                price = item.item_price*quantity
+                sale_item = SaleItem(sale=sale, item=item, sale_amount=quantity, sale_price=price)
                 sale_item.save()
+            
             return redirect('sale_detail', pk=sale.pk)
         else:
-            context = self.get_context_data(saleitem_formset=saleitem_formset)
+            context = self.get_context_data(formset=saleitem_formset)
             return render(request, self.template_name, context)
-
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        SaleItemFormSet = formset_factory(
-            SaleItemForm, formset=BaseSaleItemFormSet)
-        saleitem_formset = SaleItemFormSet()
-        context = self.get_context_data(saleitem_formset=saleitem_formset)
-        return render(request, self.template_name, context)
 
 
 class SaleDetailView(TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        pass
+        return redirect('pricelist')
 
 
 class SaleDeleteView(TemplateView):
