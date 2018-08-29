@@ -128,6 +128,17 @@ class RestockDetailView(TemplateView):
         return render(request, self.template_name, context)
 
 class RestockDeleteView(TemplateView):
+    model = Restock
+
     @method_decorator(admin_required)
     def post(self, request, *args, **kwargs):
-        pass
+        restock = get_object_or_404(Restock, pk=self.kwargs.get('pk'))
+        notice = "Restock #%s was successfully deleted" % restock.pk
+        restock.delete()
+        messages.success(request, notice, extra_tags='green rounded')
+        return redirect('restock_list')
+
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        restock = get_object_or_404(Restock, pk=self.kwargs.get('pk'))
+        return redirect('restock_detail', pk=restock.pk)

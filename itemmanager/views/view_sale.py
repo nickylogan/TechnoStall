@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms.formsets import formset_factory
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -115,11 +115,24 @@ class SaleDetailView(TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
+        if sale.user_on_duty != request.user:
+            raise Http404
         context = self.get_context_data(sale=sale)
         return render(request, self.template_name, context)
 
 
 class SaleDeleteView(TemplateView):
+    model = Sale
+
     @method_decorator(admin_required)
     def post(self, request, *args, **kwargs):
-        pass
+        sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
+        notice = "Sale #%s was successfully deleted" % sale.pk
+        sale.delete()
+        messages.success(request, notice, extra_tags='green rounded')
+        return redirect('sale_list')
+
+    @method_decorator(admin_required)
+    def get(self, request, *args, **kwargs):
+        sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
+        return redirect('sale_detail', pk=sale.pk)

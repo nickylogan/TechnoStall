@@ -148,24 +148,28 @@ table.clean tr {
                   <span class="nav-text">Sales</span>
                 </a>
             </li>
+            {% if request.session.ts_user.is_admin %}
             <li class="bold">
                 <a href="{% url 'restock_list' %}" class="waves-effect {% if active_tab == 'restock' %}nav-active{% endif %}">
                     <i class="fa fa-redo" style="font-size: 1rem;"></i>
                     <span class="nav-text">Restock</span>
                   </a>
             </li>
+            {% endif %}
             <li class="bold">
               <a href="cards-basic.html" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
                   <i class="fa fa-print" style="font-size: 1rem;"></i>
                   <span class="nav-text">Printing</span>
                 </a>
             </li>
+            {% if request.session.ts_user.is_admin %}
             <li class="bold">
               <a href="ui-basic-buttons.html" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
                   <i class="fas fa-users" style="font-size: 1rem;"></i>
                   <span class="nav-text">Staff manager</span>
                 </a>
             </li>
+            {% endif %}
           </ul>
         </li>
         <!-- <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;">
