@@ -55,6 +55,7 @@
                         </tr>
                     {% endfor %}
                 </table>
+                {% if paginations|length > 1 %}
                 <ul class="pagination">
                     {% for page in paginations %}
                         {% if page == pagination %}
@@ -64,6 +65,7 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
+                {% endif %}
             </div>
         </div>
     </div>

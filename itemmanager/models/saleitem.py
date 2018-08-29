@@ -10,6 +10,9 @@ from . import Item, Sale
 class SaleItemManager(models.Manager):
     def sale_total_amount(self, item):
         return super().get_queryset().filter(item=item).aggregate(models.Sum('sale_amount'))['sale_amount__sum'] or 0
+    
+    def sale_total_revenue(self, sale):
+        return super().get_queryset().filter(sale=sale).aggregate(models.Sum('sale_price'))['sale_price__sum'] or 0
 
 
 class SaleItem(models.Model):

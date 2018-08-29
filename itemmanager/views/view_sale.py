@@ -99,9 +99,24 @@ class SaleNewView(TemplateView):
 
 
 class SaleDetailView(TemplateView):
+    model = Sale
+    template_name = 'sale_detail.html'
+
+    def get_context_data(self, *args, **kwargs):
+        sale = kwargs.get('sale')
+        saleitems = SaleItem.objects.filter(sale=sale).order_by('item__item_name')
+        context = {
+            'sale': sale,
+            'saleitems': saleitems,
+            'active_tab': 'sale'
+        }
+        return context
+
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        return redirect('pricelist')
+        sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
+        context = self.get_context_data(sale=sale)
+        return render(request, self.template_name, context)
 
 
 class SaleDeleteView(TemplateView):

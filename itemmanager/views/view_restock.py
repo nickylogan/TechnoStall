@@ -115,9 +115,24 @@ class RestockNewView(TemplateView):
         return render(request, self.template_name, context)
 
 class RestockDetailView(TemplateView):
-    @method_decorator(admin_required)
+    model = Restock
+    template_name = 'restock_detail.html'
+
+    def get_context_data(self, *args, **kwargs):
+        sale = kwargs.get('sale')
+        saleitems = SaleItem.objects.filter(sale=sale).order_by('item__item_name')
+        context = {
+            'sale': sale,
+            'saleitems': saleitems,
+            'active_tab': 'sale'
+        }
+        return context
+
+    @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        return redirect('restock_list')
+        sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
+        context = self.get_context_data(sale=sale)
+        return render(request, self.template_name, context)
 
 class RestockDeleteView(TemplateView):
     @method_decorator(admin_required)

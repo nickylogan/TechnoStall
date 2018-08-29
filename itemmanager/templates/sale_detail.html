@@ -1,0 +1,86 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'sale_list' %}" class="breadcrumb" style="font-size:1rem">Sales</a>
+                    <a class="breadcrumb" style="font-size:1rem">#{{ sale.pk }}</a>
+                </div>
+            </div>
+        </nav>
+                            
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title row">
+                    <h4 class="col s12 m6 l8" style="margin: 0">
+                        Sale #{{ sale.pk }}
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        {% if request.session.ts_user.is_admin %}
+                        <a href="#delete-modal" class="grey-text text-lighten-1 modal-trigger">Delete</a>
+                        {% endif %}
+                        <table class="clean">
+                            <tr>
+                                <th>User on duty</th>
+                                <td>{{ sale.user_on_duty.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Created at</th>
+                                <td>{{ sale.date_created }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <table class="clean">
+                            <tr>
+                                <th>Item</th>
+                                <th style="text-align: right">Quantity</th>
+                                <th style="text-align: right">Revenue</th>
+                            </tr>
+                            {% for saleitem in saleitems %}
+                            <tr>
+                                <td>{{ saleitem.item.item_name }}</td>
+                                <td style="text-align: right">x {{ saleitem.sale_amount }}</td>
+                                <td style="text-align: right">Rp {{ saleitem.sale_price|floatformat:0|intcomma }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr style="border-top: solid thin #aaa">
+                                <th style="text-align: right" colspan="2">Total revenue</th>
+                                <th style="text-align: right">Rp {{ sale.revenue|floatformat:0|intcomma }}</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h4>This action is <span class="red-text">IRREVERSIBLE</span></h4>
+        <p>Are you sure you want to <span class="red-text">DELETE</span> SALE #{{ sale.pk }}?</p>
+    </div>
+    <div class="modal-footer">
+        <form method="POST" action="{% url 'sale_delete' pk=sale.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="modal-close waves-effect waves-red btn-flat">CONTINUE</button>
+        <a class="modal-close waves-effect btn amber darken-4 white-text">CANCEL</a>
+        </form>
+    </div>
+</div>
+{% endblock dashboard_content %}
+
+{% block dashboard_scripts %}
+    <script>
+        $(document).ready(() => $('.modal').modal());
+    </script>
+{% endblock dashboard_scripts %}

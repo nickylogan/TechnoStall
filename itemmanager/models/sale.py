@@ -17,3 +17,9 @@ class Sale(models.Model):
 
     def __str__(self):
         return super().__str__()
+
+    @property
+    def revenue(self):
+        from . import SaleItem
+        profit = SaleItem.objects.sale_total_revenue(sale=self)
+        return profit

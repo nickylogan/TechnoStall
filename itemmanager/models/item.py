@@ -23,3 +23,10 @@ class Item(models.Model):
         sales = SaleItem.objects.sale_total_amount(item=self)
         restocks = RestockItem.objects.restock_total_amount(item=self)
         return restocks - sales
+
+    @property
+    def cost(self):
+        from . import RestockItem
+        restocks = RestockItem.objects.restock_total_amount(item=self)
+        total_cost = RestockItem.objects.restock_total_cost(item=self)
+        return total_cost / restocks

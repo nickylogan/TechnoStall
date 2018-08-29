@@ -1,6 +1,21 @@
 {% extends "core/dashboard.html" %}
 {% load humanize %}
-
+{% block dashboard_styles %}
+<style>
+    .restock-row {
+        margin: 1rem 0;
+        padding: 1rem 0;
+        transition: background-color .1s ease-in-out;
+    }
+    .restock-row h5{
+        margin: 0;
+        margin-bottom: .25rem;
+    }
+    .restock-row:hover {
+        background: #eee;
+    }
+</style>
+{% endblock dashboard_styles %}
 {% block dashboard_content %}
 <div class="row">
     <div class="col s12 m12 l12">
@@ -8,12 +23,12 @@
             <div class="nav-wrapper">
                 <div class="col s12">
                     <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
-                    <a href="{% url 'sale_list' %}" class="breadcrumb" style="font-size:1rem">Restocks</a>
+                    <a href="{% url 'restock_list' %}" class="breadcrumb" style="font-size:1rem">Restock</a>
                 </div>
             </div>
         </nav>
                             
-        <div class="card">
+        <div class="card z-depth-0">
             <div class="card-content">
                 <div class="card-title row" style="margin-bottom: 1rem">
                     <h4 class="col s8 l11" style="margin: 0">
@@ -24,28 +39,29 @@
                         <span>Add</span>
                     </a>
                 </div>
-                <table>
                 {% for restock in restocks %}
-                    <tr class="" onclick="location.href=`{% url 'restock_detail' pk=restock.pk %}`">
-                        <h4>
-                            Restock #{{ restock.pk }}
-                        </h4>
-                        <p>{{ restock.date_created }}</p>
-                        <p>Rp 0</p>
-                    </tr>
+                    <div class="row restock-row valign-wrapper z-depth-1" onclick="location.href=`{% url 'restock_detail' pk=restock.pk %}`" style="cursor: pointer">
+                        <div class="col s12">
+                            <h5>
+                                Restock #{{ restock.pk }}
+                            </h5>
+                            <p>{{ restock.date_created }}</p>
+                        </div>
+                    </div>
                     {% empty %}
-                    <p>There are no restocks yet</p>
+                    <p>No restocks had been done yet</p>
                 {% endfor %}
-                </table>
+                {% if paginations|length > 1 %}
                 <ul class="pagination">
                     {% for page in paginations %}
-                        {% if page == pagination %}
-                        <li class="active"><a href="{% url 'pricelist' %}?p={{ page }}">{{ page }}</a></li>
-                        {% else %}
-                        <li class="waves-effect"><a href="{% url 'pricelist' %}?p={{ page }}">{{ page }}</a></li>
-                        {% endif %}
+                    {% if page == pagination %}
+                    <li class="active"><a href="{% url 'restock_list' %}?p={{ page }}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="waves-effect"><a href="{% url 'restock_list' %}?p={{ page }}">{{ page }}</a></li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
+                {% endif %}
             </div>
         </div>
     </div>
