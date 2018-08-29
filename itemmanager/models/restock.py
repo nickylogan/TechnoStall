@@ -18,3 +18,9 @@ class Restock(models.Model):
 
     def __str__(self):
         return super().__str__()
+    
+    @property
+    def total_cost(self):
+        from . import RestockItem
+        cost = RestockItem.objects.restock_total_cost(restock=self)
+        return cost

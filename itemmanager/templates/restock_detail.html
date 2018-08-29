@@ -1,0 +1,86 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'restock_list' %}" class="breadcrumb" style="font-size:1rem">Restock</a>
+                    <a class="breadcrumb" style="font-size:1rem">#{{ restock.pk }}</a>
+                </div>
+            </div>
+        </nav>
+                            
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title row">
+                    <h4 class="col s12 m6 l8" style="margin: 0">
+                        Restock #{{ restock.pk }}
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        {% if request.session.ts_user.is_admin %}
+                        <a href="#delete-modal" class="grey-text text-lighten-1 modal-trigger">Delete</a>
+                        {% endif %}
+                        <table class="clean">
+                            <tr>
+                                <th>PIC</th>
+                                <td>{{ restock.restock_PIC.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Created at</th>
+                                <td>{{ restock.date_created }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <table class="clean">
+                            <tr>
+                                <th>Item</th>
+                                <th style="text-align: right">Quantity</th>
+                                <th style="text-align: right">Cost</th>
+                            </tr>
+                            {% for restockitem in restockitems %}
+                            <tr>
+                                <td>{{ restockitem.item.item_name }}</td>
+                                <td style="text-align: right">x {{ restockitem.restock_item_amount }}</td>
+                                <td style="text-align: right">Rp {{ restockitem.restock_item_total_cost|floatformat:0|intcomma }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr style="border-top: solid thin #aaa">
+                                <th style="text-align: right" colspan="2">Total cost</th>
+                                <th style="text-align: right">Rp {{ restock.total_cost|floatformat:0|intcomma }}</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h4>This action is <span class="red-text">IRREVERSIBLE</span></h4>
+        <p>Are you sure you want to <span class="red-text">DELETE</span> RESTOCK #{{ restock.pk }}?</p>
+    </div>
+    <div class="modal-footer">
+        <form method="POST" action="{% url 'restock_delete' pk=restock.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="modal-close waves-effect waves-red btn-flat">CONTINUE</button>
+        <a class="modal-close waves-effect btn amber darken-4 white-text">CANCEL</a>
+        </form>
+    </div>
+</div>
+{% endblock dashboard_content %}
+
+{% block dashboard_scripts %}
+    <script>
+        $(document).ready(() => $('.modal').modal());
+    </script>
+{% endblock dashboard_scripts %}

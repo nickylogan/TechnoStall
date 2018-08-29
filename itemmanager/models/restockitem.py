@@ -12,11 +12,11 @@ class RestockItemManager(models.Manager):
     def filter_item(self, item):
         return super().get_queryset().filter(item=item)
 
-    def restock_total_amount(self, item):
-        return super().get_queryset().filter(item=item).aggregate(models.Sum('restock_item_amount'))['restock_item_amount__sum'] or 0
+    def restock_total_amount(self, *args, **kwargs):
+        return super().get_queryset().filter(**kwargs).aggregate(models.Sum('restock_item_amount'))['restock_item_amount__sum'] or 0
 
-    def restock_total_cost(self, item):
-        return super().get_queryset().filter(item=item).aggregate(models.Sum('restock_item_total_cost'))['restock_item_total_cost__sum'] or 0
+    def restock_total_cost(self, *args, **kwargs):
+        return super().get_queryset().filter(**kwargs).aggregate(models.Sum('restock_item_total_cost'))['restock_item_total_cost__sum'] or 0
 
 class RestockItem(models.Model):
     restock = models.ForeignKey(Restock, on_delete=models.CASCADE)

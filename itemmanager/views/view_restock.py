@@ -119,19 +119,19 @@ class RestockDetailView(TemplateView):
     template_name = 'restock_detail.html'
 
     def get_context_data(self, *args, **kwargs):
-        sale = kwargs.get('sale')
-        saleitems = SaleItem.objects.filter(sale=sale).order_by('item__item_name')
+        restock = kwargs.get('restock')
+        restockitems = RestockItem.objects.filter(restock=restock).order_by('item__item_name')
         context = {
-            'sale': sale,
-            'saleitems': saleitems,
-            'active_tab': 'sale'
+            'restock': restock,
+            'restockitems': restockitems,
+            'active_tab': 'restock'
         }
         return context
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        sale = get_object_or_404(Sale, pk=self.kwargs.get('pk'))
-        context = self.get_context_data(sale=sale)
+        restock = get_object_or_404(Restock, pk=self.kwargs.get('pk'))
+        context = self.get_context_data(restock=restock)
         return render(request, self.template_name, context)
 
 class RestockDeleteView(TemplateView):
