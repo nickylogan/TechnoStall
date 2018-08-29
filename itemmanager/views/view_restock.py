@@ -70,10 +70,11 @@ class RestockNewView(TemplateView):
         restock_form = RestockForm(request.POST, request.FILES)
         restockitem_formset = self.RestockItemFormSet(request.POST)
         print(request.POST)
+        print(request.FILES)
         print(restockitem_formset.is_valid())
         if restock_form.is_valid() and restockitem_formset.is_valid():
             # Create restock
-            proof = restock_form.cleaned_data.get('restock_proof_of_payment')
+            proof = request.FILES['restock_proof_of_payment']
 
             restock = Restock(restock_PIC=request.user, restock_proof_of_payment=proof)
             restock.save()
@@ -105,14 +106,6 @@ class RestockNewView(TemplateView):
         else:
             context = self.get_context_data(formset=restockitem_formset, form=restock_form)
             return render(request, self.template_name, context)
-
-    @method_decorator(admin_required)
-    def get(self, request, *args, **kwargs):
-        RestockItemFormSet = formset_factory(
-            RestockItemForm, formset=BaseRestockItemFormSet)
-        restockitem_formset = RestockItemFormSet()
-        context = self.get_context_data(formset=restockitem_formset)
-        return render(request, self.template_name, context)
 
 class RestockDetailView(TemplateView):
     model = Restock

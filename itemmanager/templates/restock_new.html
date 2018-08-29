@@ -36,7 +36,24 @@
         <h4 style="padding: 0 0.75rem">
             New restock
         </h4>
-        <form id="restock-form" class="col s12" method="POST" onsubmit="return confirm('Are you sure?')">
+        <form enctype="multipart/form-data" id="restock-form" class="col s12" method="POST" onsubmit="return confirm('Are you sure?')">
+            {% csrf_token %}
+            <div class="input-field">
+                <style>
+                    form p {
+                        text-align: center;
+                    }
+                </style>
+                <div style="margin-bottom: 1rem">
+                    <b for="{{ restock_form.restock_proof_of_payment.id_for_label }}">Proof of payment</b>
+                </div>
+                <small class="red">{{ restock_form.retock_proof_of_payment.errors }}</small>
+                <input id="{{ restock_form.restock_proof_of_payment.id_for_label }}" name="{{ restock_form.restock_proof_of_payment.html_name }}" type="file" class="dropify" data-allowed-file-extensions="png jpeg jpg" data-max-file-size="2M"
+                    {% if restock_form.retock_proof_of_payment.value %}
+                        data-default-file="{{ restock_form.restock_proof_of_payment.value.url|default:'' }}"
+                    {% endif %}
+                />
+            </div>
             <div class="row">
                 <div class="col s4 m7">
                     <h6><b>Item</b></h6>
@@ -50,7 +67,6 @@
                 <div class="col s2 m1">
                 </div>
             </div>
-            {% csrf_token %}
             {{ restockitem_formset.management_form }}
             <div id="restock-items">
             {% for restockitem_form in restockitem_formset %}
