@@ -74,7 +74,7 @@ class RestockNewView(TemplateView):
         print(restockitem_formset.is_valid())
         if restock_form.is_valid() and restockitem_formset.is_valid():
             # Create restock
-            proof = request.FILES['restock_proof_of_payment']
+            proof = request.FILES.get('restock_proof_of_payment', None)
 
             restock = Restock(restock_PIC=request.user, restock_proof_of_payment=proof)
             restock.save()
