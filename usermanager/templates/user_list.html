@@ -1,0 +1,77 @@
+{% extends "core/dashboard.html" %}
+{% load humanize %}
+{% block dashboard_styles %}
+<style>
+    .user-row {
+        margin: 1rem 0;
+        padding: 1rem 0;
+        transition: background-color .1s ease-in-out;
+    }
+
+    .user-row h5 {
+        margin: 0;
+        margin-bottom: .25rem;
+    }
+
+    .user-row:hover {
+        background: #eee;
+    }
+</style>
+{% endblock dashboard_styles %}
+{% block dashboard_content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <nav class="clean">
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="{% url 'dashboard' %}" class="breadcrumb" style="font-size:1rem">Dashboard</a>
+                    <a href="{% url 'user_list' %}" class="breadcrumb" style="font-size:1rem">Users</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="card z-depth-0">
+            <div class="card-content">
+                <div class="card-title row" style="margin-bottom: 1rem">
+                    <h4 class="col s8 l11" style="margin: 0">
+                        Users
+                    </h4>
+                    <a href="{% url 'user_new' %}" class="col s4 l1 btn-small amber darken-4">
+                        <i class="fa fa-plus"></i>
+                        <span>Add</span>
+                    </a>
+                </div>
+                {% for ts_user in ts_users %}
+                <div class="row user-row valign-wrapper z-depth-1" onclick="location.href=`{% url 'user_detail' pk=ts_user.id %}`"
+                    style="cursor: pointer">
+                    <div class="col s7 m9">
+                        <h5>
+                            {{ts_user.user.get_full_name}}
+                        </h5>
+                        <p>{{ts_user.major_string}}</p>
+                    </div>
+                    <div class="col s5 m3">
+                        {% if ts_user.role == 'SA' %}
+                            <small class="right"><b>Admin</b><i class="fas fa-circle blue-text text-darken-2" style="margin-left:5px"></i></small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p>There are no sales available</p>
+                {% endfor %}
+                {% if paginations|length > 1 %}
+                <ul class="pagination">
+                    {% for page in paginations %}
+                    {% if page == pagination %}
+                    <li class="active"><a href="{% url 'user_list' %}?p={{ page }}">{{ page }}</a></li>
+                    {% else %}
+                    <li class="waves-effect"><a href="{% url 'user_list' %}?p={{ page }}">{{ page }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}
