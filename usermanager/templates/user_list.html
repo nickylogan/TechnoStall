@@ -36,9 +36,8 @@
                     <h4 class="col s8 l11" style="margin: 0">
                         Users
                     </h4>
-                    <a href="{% url 'user_new' %}" class="col s4 l1 btn-small amber darken-4">
-                        <i class="fa fa-plus"></i>
-                        <span>Add</span>
+                    <a href="{% url 'user_new' %}" class="col s4 l1 btn-small darken-4 white black-text">
+                        <span><i class="fas fa-user-plus" style="font-size: 1rem; vertical-align: top; margin-right: .5rem"></i>Add</span>
                     </a>
                 </div>
                 {% for ts_user in ts_users %}
@@ -52,7 +51,7 @@
                     </div>
                     <div class="col s5 m3">
                         {% if ts_user.role == 'SA' %}
-                            <small class="right"><b>Admin</b><i class="fas fa-circle blue-text text-darken-2" style="margin-left:5px"></i></small>
+                            <small class="right"><b>Admin</b><i class="fas fa-user-cog blue-text text-darken-2" style="margin-left:5px"></i></small>
                         {% endif %}
                     </div>
                 </div>
