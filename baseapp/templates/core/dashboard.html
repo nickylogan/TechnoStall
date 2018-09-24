@@ -164,7 +164,7 @@ table.clean tr {
             </li>
             {% if request.session.ts_user.is_admin %}
             <li class="bold">
-              <a href="ui-basic-buttons.html" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
+              <a href="{% url 'user_list' %}" class="waves-effect {% if active_tab == 'staff' %}nav-active{% endif %}">
                   <i class="fas fa-users" style="font-size: 1rem;"></i>
                   <span class="nav-text">Staff manager</span>
                 </a>

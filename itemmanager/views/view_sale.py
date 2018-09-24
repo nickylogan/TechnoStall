@@ -23,7 +23,7 @@ class SaleListView(TemplateView):
         pagination = kwargs.get('page')
         request = kwargs.get('request')
         try:
-            pagination = int(pagination) - 1
+            pagination = max(0, int(pagination) - 1)
         except ValueError:
             pagination = 0
         pagination = pagination if pagination > 0 else 0
