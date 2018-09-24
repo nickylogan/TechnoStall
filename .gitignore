@@ -3,3 +3,9 @@
 
 # Ignore media files
 media/**/*
+
+# Ignore venv
+django-venv/
+
+# Ignore .vscode settings
+.vscode/
