@@ -41,14 +41,18 @@ class UserListView(TemplateView):
         context = self.get_context_data(page=pagination, request=request)
         return render(request, self.template_name, context)
 
+@admin_required
 def user_detail(request):
-    return render(request, 'core/construction.html')
+    return render(request, 'core/construction.html', {'active_tab': 'staff'})
 
+@admin_required
 def user_new(request):
-    return render(request, 'core/construction.html')
+    return render(request, 'core/construction.html', {'active_tab': 'staff'})
 
+@admin_required
 def user_edit(request):
-    return render(request, 'core/construction.html')
+    return render(request, 'core/construction.html', {'active_tab': 'staff'})
 
+@admin_required
 def user_delete(request):
-    return render(request, 'core/construction.html')
+    return render(request, 'core/construction.html', {'active_tab': 'staff'})

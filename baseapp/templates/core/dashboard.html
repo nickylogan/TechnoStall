@@ -157,7 +157,7 @@ table.clean tr {
             </li>
             {% endif %}
             <li class="bold">
-              <a href="cards-basic.html" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
+              <a href="{% url 'print' %}" class="waves-effect {% if active_tab == 'print' %}nav-active{% endif %}">
                   <i class="fa fa-print" style="font-size: 1rem;"></i>
                   <span class="nav-text">Printing</span>
                 </a>

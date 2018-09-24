@@ -8,5 +8,6 @@ urlpatterns = [
     path('dashboard/profile', views.profile, name='profile'),
     path('dashboard/', include('itemmanager.urls')),
     path('dashboard/', include('usermanager.urls')),
+    path('print/', views.print, name='print'),
     path('', views.index, name='index')
 ]

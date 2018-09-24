@@ -46,3 +46,6 @@ def dashboard(request):
 def profile(request):
     # TODO create profile template
     return render(request, 'core/dashboard.html')
+
+def print(request):
+    return render(request, 'core/construction.html', {'active_tab': 'print'})
