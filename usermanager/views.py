@@ -22,8 +22,8 @@ class UserListView(TemplateView):
         except ValueError:
             pagination = 0
         pagination = pagination if pagination > 0 else 0
-        users_per_page = 10
-        users = TSUser.objects.order_by('id')
+        users_per_page = 5
+        users = TSUser.objects.order_by('user__first_name').order_by('user__last_name')
         max_pagination = math.ceil(users.count() / users_per_page)
         min_user_index = pagination*users_per_page
         context = {
@@ -42,13 +42,13 @@ class UserListView(TemplateView):
         return render(request, self.template_name, context)
 
 def user_detail(request):
-    pass
+    return render(request, 'core/construction.html')
 
 def user_new(request):
-    pass
+    return render(request, 'core/construction.html')
 
 def user_edit(request):
-    pass
+    return render(request, 'core/construction.html')
 
 def user_delete(request):
-    pass
+    return render(request, 'core/construction.html')

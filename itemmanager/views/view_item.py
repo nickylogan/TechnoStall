@@ -26,8 +26,7 @@ class PricelistView(TemplateView):
             pagination = 0
         pagination = pagination if pagination > 0 else 0
         item_per_page = 10
-        items = Item.objects.order_by('item_name').filter(
-            item_name__icontains=filter_pattern)
+        items = Item.objects.order_by('item_name').filter(item_name__icontains=filter_pattern)
         max_pagination = math.ceil(items.count() / item_per_page)
         min_item_index = pagination*item_per_page
         context = {
