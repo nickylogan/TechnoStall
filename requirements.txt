@@ -13,7 +13,7 @@ idna==2.7
 isort==4.3.4
 lazy-object-proxy==1.3.1
 mccabe==0.6.1
-Pillow==5.2.0
+Pillow==8.2.0
 pip-tools==2.0.2
 pipenv==2018.7.1
 pipreqs==0.4.9
